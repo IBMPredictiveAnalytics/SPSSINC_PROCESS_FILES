@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+<link rel="stylesheet" type="text/css" href="extsyntax.css" />
+<title>SPSSINC PROCESS FILES Extension Command</title>
+
+<link rel="stylesheet" type="text/css" href="extsyntax.css" />
+
+
+
+
+
+</head>
+
+<body>
+<h1>SPSSINC PROCESS FILES Extension Command</h1>
+
+<p>Execute a file of syntax on a batch of data files
+specified in a list or with a wild card</p>
+<div class="syntax">
+<p>SPSSINC PROCESS FILES
+FILELIST=&ldquo;<em>input data file specification</em>&rdquo; or INPUTDATA=&ldquo;<em>directory wildcard specification&rdquo;<br/>
+SYNTAX=&ldquo;*syntax file to apply to each input file</em>&rdquo; 
+BEFORESYNTAX=&ldquo;<em>syntax file to apply before starting iterations</em>&rdquo;<br/>
+AFTERSYNTAX=&ldquo;<em>syntax file to apply after all iterations are complete</em>&rdquo;<br/>
+SEARCH=NO<sup>&#42;&#42;</sup> or YES<br/>
+OUTPUTDATADIR=&ldquo;<em>directory for data output</em>&rdquo;<br/>
+VIEWERDIR=&ldquo;<em>directory for Viewer output</em>&rdquo; or VIEWERFILE=&ldquo;<em>file for a single Viewer output</em>&rdquo;<br/>
+LOGFILE=&ldquo;<em>log file</em>&rdquo;<br/>
+LOGFILEMODE=APPEND<sup>&#42;&#42;</sup> or OVERWRITE<br/>
+MACRONAME=&ldquo;<em>root name for macros and file handles</em>&rdquo;<br/>
+CONTINUEONERROR=YES<sup>&#42;&#42;</sup> or NO<br/>
+CLOSEDATA=YES<sup>&#42;&#42;</sup> or NO</p>
+
+<p>/MACRODEFS PARM1=&ldquo;<em>text</em>&rdquo; PARM2=&ldquo;<em>text</em>&rdquo; &hellip; PARM5=&ldquo;<em>text</em>&rdquo;<br/>
+QPARM1=&ldquo;<em>text</em>&rdquo; QPARM2=&ldquo;<em>text</em>&rdquo; &hellip; QPARM5=&ldquo;<em>text</em>&rdquo;</p>
+
+<p><sup>&#42;</sup> Required<br/>
+<sup>&#42;&#42;</sup> Default</p>
+</div>
+
+<p>SPSSINC PROCESS FILES /HELP displays this help and does nothing else.</p>
+
+
+
+<pre class="example"><code>SPSSINC PROCESS FILES DIRECTORY=&quot;c:/mydata/*.sav&quot;
+SYNTAX=&quot;c:/myjobs/mysyntax.sps&quot; LOGFILE=&quot;c:/myjobs/log.txt&quot; 
+VIEWERDIR=&quot;c:/myoutput&quot;
+/MACRODEFS PARM1=&quot;x &gt; 10&quot;.
+</code></pre>
+
+<p><strong>INPUTDATA</strong> can specify a directory to process and, optionally, a file pattern.<br/>
+For example,</p>
+
+<pre><code>c:/mydata/x*.sav
+</code></pre>
+
+<p>would process all the sav files in directory c:\mydata whose names start with the letter x.
+*.sav is assumed if DIRECTORY does not include a file pattern.</p>
+
+<p>Alternatively, <strong>FILELIST</strong> specifies processing all of the files listed in the indicated file.<br/>
+In order to use a file to specify the files that should be processed, create a file
+with one name per line including the path to the file.  The names in the file must be enclosed
+in double quotes (&ldquo;).  Anything following on the line is ignored.<br/>
+Blank lines and lines starting with # are ignored.</p>
+
+<p>The SPSSINC SPLIT DATASET command can produce a file in the correct format
+for FILELIST.</p>
+
+<p>Either INPUTDATA or FILELIST must be specified but not both.</p>
+
+<p>The file of syntax specified in <strong>SYNTAX</strong> will be executed for each matching input file.<br/>
+It should include the appropriate command to read the data file or other inputs using
+the file handles or macros defined to refer to the input file and various output 
+locations.  It is a common error to forget to open the input file in the syntax
+file being applied.</p>
+
+<p>The file handles are as follows.</p>
+
+<ul>
+<li>JOB_INPUTFILE: The input file, including any directory path specified</li>
+<li>JOB_DATADIR: The input data directory</li>
+<li>JOB_OUTPUTDATADIR: The specified output data directory or <code>&lt;NONE&gt;</code></li>
+<li>JOB_VIEWERDIR: The specified Viewer output directory or <code>&lt;NONE&gt;</code></li>
+</ul>
+
+<p>For a SAV file you could read the data with the command<br/>
+<code>GET FILE=&quot;JOB_INPUTFILE&quot;.</code></p>
+
+<p>Macros are defined with these same names except starting with &rdquo;!&ldquo;.  Two
+additional macros are defined.</p>
+
+<ul>
+<li>!JOB_DATAFILEROOT: The name of the input data file without its extension and
+excluding the path information</li>
+<li>!JOB_DATAFILEEXT: The extension of the input data file</li>
+</ul>
+
+<p>Macro text is quoted.  Here is an example of code that might be used in the
+syntax file to export output to the VIEWERDIR as an Excel file using the data file rootname.
+The text !JOB or JOB is replaced by the root name specified in MACRONAME.</p>
+
+<pre><code>define !out () !quote(!concat(!unquote(!eval(!job_viewerdir)), &quot;/&quot;, !unquote(!eval(!job_datafileroot)), &quot;.xls&quot;))
+!enddefine.
+output export /xls DOCUMENTFILE =!out.
+</code></pre>
+
+<p>Here is an example of reading a batch of Excel files and writing them as
+sav files with the same base name but extension <em>sav</em>.</p>
+
+<pre class="example"><code>define !out () !quote(!concat(!unquote(!eval(!JOB_OUTPUTDATADIR)),
+    !unquote(!eval(!JOB_DATAFILEROOT)),
+    &quot;.sav&quot;)) !enddefine.
+
+GET DATA /TYPE=XLSX
+  /FILE=JOB_INPUTFILE
+  /SHEET=name &#39;Sheet1&#39;
+  /CELLRANGE=full  /READNAMES=on
+  /ASSUMEDSTRWIDTH=100.
+
+SAVE OUTFILE=!out.
+</code></pre>
+
+<p><strong>BEFORESYNTAX</strong> and <strong>AFTERSYNTAX</strong> can specify syntax files to be executed
+before or after any input files are processed.  The before file will have all the file handles
+and macros as set for the first input file, and the after file will have these items as set
+for the last file processed.  These files are typically used to initialize the iterations
+and clean up at the end of the job.</p>
+
+<p>A serious error in BEFORESYNTAX always stops processing.  The
+<strong>CONTINUEONERROR</strong> setting determines whether the AFTERSYNTAX file is
+executed if there is an error.</p>
+
+<p>Instead of SYNTAX, <strong>SEARCH</strong> can be specified to search files according to
+parameters passed as !PARM1, !PARM2, and !PARM3.
+!PARM1 defines the search condition as a boolean expression as would be
+used with SELECT IF.
+!PARM2 is the id variable. !PARM3 is any other variables to be listed with the results.
+Either SYNTAX or SEARCH must be specified but not both.</p>
+
+<p>If <strong>CLOSEDATA</strong> is YES, all data files are automatically closed 
+after each syntax file invocation.</p>
+
+<p>It may be convenient to use this procedure in combination with SPSSINC SPLIT DATASET,
+which can break up a dataset according to the values of a splitting variable.</p>
+
+<p>If <strong>OUTPUTDATADIR</strong> is specified, after the syntax completes for each iteration
+the active data file will be written as an .sav file to that directory .
+This can be useful when carrying out transformations for a set of files.
+You can, of course, leave this field blank and write any data file output you choose.<br/>
+The <code>JOB_OUTPUTDATADIR</code> file handle and <code>!JOB_OUTPUTDATADIR</code> macro 
+identify the data output location specified in PROCESS FILES.</p>
+
+<p>Viewer output can be saved either in a separate spv file for each data file or as a single
+file for the entire job by specifying either <strong>VIEWERDIR</strong> or <strong>VIEWERFILE</strong>
+and entering either a directory name or a file specification.  </p>
+
+<p>If VIEWERFILE specifies only a directory, the file will be named VIEWER.SPV.</p>
+
+<p><strong>LOGFILE</strong> specifies a file that will contain a log of actions carried out by
+PROCESS FILES (not what happens in the invoked syntax), including an entry if
+the syntax generates a serious error (level 3 or higher).  </p>
+
+<p><strong>LOGFILEMODE</strong> can be APPEND or OVERWRITE.  The file is written in Unicode (utf-8).</p>
+
+<p>If a serious error occurs while executing the syntax file, you can choose whether 
+to continue processing with the next data file or to stop processing any further 
+files by specifying <strong>CONTINUEONERROR</strong> = YES or NO.
+If possible, the output data and Viewer files will still be written for the data file
+that caused the error even if stopping is specified.</p>
+
+<h2>MACRODEFS</h2>
+
+<p>MACRODEFS can be used to define macros that can be referenced in
+the syntax file that is repeatedly executed.  Each macro name matches the PARMn
+or QPARMn parameter with a preceding !.  These macros are defined after the 
+macros described above each time a file is processed, so they can refer to the 
+stadard macro values.
+The definition will be wrapped in quotes and hence be interpreted as a literal
+if QPARM is used.  The parameters must always be quoted in the MACRODEFS
+subcommand.</p>
+
+<p>If a macro is not explicitly defined, it will automatically be defined as empty.</p>
+
+<p>Example:  with this syntax</p>
+
+<pre><code>/MACRODEF PARM1=&quot;education &gt;= 12 and education &lt;=16&quot; PARM2=&quot;educ age&quot;
+</code></pre>
+
+<p>the syntax job could contain this code to do frequencies on qualifying data.</p>
+
+<pre><code>SELECT IF !PARM1.
+FREQ !PARM2.
+</code></pre>
+
+<p>This construct could also be used to search for a particular id, say, across files</p>
+
+<pre><code>/MACRODEF PARM1=&quot;ID = 12345&quot; PARM2 = &quot;ID&quot;
+</code></pre>
+
+<p>and, in the syntax file,</p>
+
+<pre><code>SELECT IF !PARM1.
+FREQ !PARM2.
+</code></pre>
+
+<p>But for a literal, say, as a table title, you would use QPARM:</p>
+
+<pre><code>CTABLES ...  /TITLES TITLE=!QPARM1.
+... /MACRODEFS QPARM1=&quot;The Title&quot;.
+</code></pre>
+
+<p>In these examples, you should use CONTINUEONERROR=YES, since
+the SELECT will result in 0 cases in the data if none meet the criteria.</p>
+
+<p>A complete version of a search syntax file is included with this package.</p>
+
+<p>If any of the file or directory specifications to this command use SPSS file handles,
+these will be expanded properly in Statistics version 18 or later, but in earlier versions, they
+will not work with directory specifications or where a wildcard expression is
+allowed.</p>
+
+<p>&copy; Copyright IBM Corp. 1989, 2014</p>
+
+</body>
+
+</html>
+
