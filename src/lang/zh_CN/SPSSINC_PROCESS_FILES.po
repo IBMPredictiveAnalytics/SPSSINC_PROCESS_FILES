@@ -1,0 +1,166 @@
+#/***********************************************************************
+# * Licensed Materials - Property of IBM 
+# *
+# * IBM SPSS Products: Statistics Common
+# *
+# * (C) Copyright IBM Corp. 1989, 2014
+# *
+# * US Government Users Restricted Rights - Use, duplication or disclosure
+# * restricted by GSA ADP Schedule Contract with IBM Corp. 
+# ************************************************************************/
+
+# NLS_ENCODING=UTF-8
+# IBMUPYTH
+
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2014-05-21 17:51+China Standard Time\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: SPSSINC_PROCESS_FILES.py:224
+msgid "---"
+msgstr ""
+"---"
+
+#: SPSSINC_PROCESS_FILES.py:288
+msgid "Either FILELIST or INPUTDATA must be specified but not both"
+msgstr ""
+"必须指定 FILELIST 或 INPUTDATA，但不得同时指定这两者"
+
+#: SPSSINC_PROCESS_FILES.py:290
+msgid "Cannot specify both VIEWERDIR and VIEWEROUTFILE"
+msgstr ""
+"不得同时指定 VIEWERDIR 和 VIEWEROUTFILE"
+
+#: SPSSINC_PROCESS_FILES.py:292
+msgid "Must specify either a syntax file or searching but not both"
+msgstr ""
+"必须指定某个语法文件或者指定搜索，但不得同时指定这两者"
+
+#: SPSSINC_PROCESS_FILES.py:309
+msgid "MACRONAME must start with !"
+msgstr ""
+"必须以 MACRONAME 开头！"
+
+#: SPSSINC_PROCESS_FILES.py:337
+msgid "START: apply %(syntax)s to %(inputsource)s"
+msgstr ""
+"开始：将 %(syntax)s 应用于 %(inputsource)s"
+
+#: SPSSINC_PROCESS_FILES.py:339
+msgid "START: searching in %(inputsource)s"
+msgstr ""
+"开始：在 %(inputsource)s 中进行搜索"
+
+#: SPSSINC_PROCESS_FILES.py:352
+msgid "Skipping %s: not a file"
+msgstr ""
+"正在跳过 %s：不是文件"
+
+#: SPSSINC_PROCESS_FILES.py:376
+msgid ""
+"This version of IBM SPSS Statistics does not support \nextended characters in macro definitions.  Some macros will not be defined."
+msgstr ""
+"此版本的 IBM SPSS Statistics 在宏定义中\n不支持扩展字符。将不会定义某些宏。"
+
+#: SPSSINC_PROCESS_FILES.py:405
+msgid "Inserting beforesyntax file: %s."
+msgstr ""
+"正在插入前置语法文件：%s。"
+
+#: SPSSINC_PROCESS_FILES.py:408
+msgid "Serious error processing BEFORE file: %s.  Stopping"
+msgstr ""
+"处理 BEFORE 文件时发生严重错误：%s。正在停止"
+
+#: SPSSINC_PROCESS_FILES.py:412
+msgid "Defining: %(input)s and INSERTing %(syntax)s"
+msgstr ""
+"正在定义 %(input)s 并插入 %(syntax)s"
+
+#: SPSSINC_PROCESS_FILES.py:421
+msgid "Continuing"
+msgstr ""
+"正在继续"
+
+#: SPSSINC_PROCESS_FILES.py:421
+msgid "Serious error processing: %s.  %s"
+msgstr ""
+"处理 %s 时发生严重错误。%s"
+
+#: SPSSINC_PROCESS_FILES.py:421
+msgid "Stopping"
+msgstr ""
+"正在停止"
+
+#: SPSSINC_PROCESS_FILES.py:425 SPSSINC_PROCESS_FILES.py:437
+#: SPSSINC_PROCESS_FILES.py:460
+msgid "Writing %s"
+msgstr ""
+"正在写 %s"
+
+#: SPSSINC_PROCESS_FILES.py:429
+msgid "Error writing data file"
+msgstr ""
+"写数据文件时出错"
+
+#: SPSSINC_PROCESS_FILES.py:432
+msgid "Warning: file overwritten: %s"
+msgstr ""
+"警告：文件被覆盖：%s"
+
+#: SPSSINC_PROCESS_FILES.py:441
+msgid "Error writing Viewer file"
+msgstr ""
+"写查看器文件时出错"
+
+#: SPSSINC_PROCESS_FILES.py:446
+msgid "Warning: Output file overwritten: %s"
+msgstr ""
+"警告：输出文件被覆盖：%s"
+
+#: SPSSINC_PROCESS_FILES.py:455
+msgid "Inserting aftersyntax file: %s."
+msgstr ""
+"正在插入后置语法文件：%s。"
+
+#: SPSSINC_PROCESS_FILES.py:458
+msgid "Serious error processing AFTER file: %s."
+msgstr ""
+"处理 AFTER 文件时发生严重错误：%s。"
+
+#: SPSSINC_PROCESS_FILES.py:489
+msgid ": CLOSING LOG"
+msgstr ""
+"：正在关闭日志"
+
+#: SPSSINC_PROCESS_FILES.py:521
+msgid "Bad format in filelist file: %s"
+msgstr ""
+"文件列表文件中的格式不正确：%s"
+
+#: SPSSINC_PROCESS_FILES.py:551
+msgid "Relative paths cannot be specified with a drive letter: %s"
+msgstr ""
+"不得指定带有盘符的相对路径：%s"
+
+#: SPSSINC_PROCESS_FILES.py:555
+msgid "Directory or file does not exist: %s"
+msgstr ""
+"目录或文件不存在：%s"
+
+
+
