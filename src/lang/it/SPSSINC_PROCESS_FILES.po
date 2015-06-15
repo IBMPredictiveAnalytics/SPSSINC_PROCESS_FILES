@@ -1,0 +1,166 @@
+#/***********************************************************************
+# * Licensed Materials - Property of IBM 
+# *
+# * IBM SPSS Products: Statistics Common
+# *
+# * (C) Copyright IBM Corp. 1989, 2014
+# *
+# * US Government Users Restricted Rights - Use, duplication or disclosure
+# * restricted by GSA ADP Schedule Contract with IBM Corp. 
+# ************************************************************************/
+
+# NLS_ENCODING=UTF-8
+# IBMUPYTH
+
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2014-05-21 17:51+China Standard Time\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: SPSSINC_PROCESS_FILES.py:224
+msgid "---"
+msgstr ""
+"---"
+
+#: SPSSINC_PROCESS_FILES.py:288
+msgid "Either FILELIST or INPUTDATA must be specified but not both"
+msgstr ""
+"È necessario specificare FILELIST o INPUTDATA, ma non entrambi"
+
+#: SPSSINC_PROCESS_FILES.py:290
+msgid "Cannot specify both VIEWERDIR and VIEWEROUTFILE"
+msgstr ""
+"Impossibile specificare sia VIEWERDIR che VIEWEROUTFILE"
+
+#: SPSSINC_PROCESS_FILES.py:292
+msgid "Must specify either a syntax file or searching but not both"
+msgstr ""
+"È necessario specificare un file di sintassi o la ricerca ma non entrambi"
+
+#: SPSSINC_PROCESS_FILES.py:309
+msgid "MACRONAME must start with !"
+msgstr ""
+"MACRONAME deve iniziare con !"
+
+#: SPSSINC_PROCESS_FILES.py:337
+msgid "START: apply %(syntax)s to %(inputsource)s"
+msgstr ""
+"START: applicare %(syntax)s a %(inputsource)s"
+
+#: SPSSINC_PROCESS_FILES.py:339
+msgid "START: searching in %(inputsource)s"
+msgstr ""
+"START: ricerca in %(inputsource)s"
+
+#: SPSSINC_PROCESS_FILES.py:352
+msgid "Skipping %s: not a file"
+msgstr ""
+"%s viene ignorato: non è un file"
+
+#: SPSSINC_PROCESS_FILES.py:376
+msgid ""
+"This version of IBM SPSS Statistics does not support \nextended characters in macro definitions.  Some macros will not be defined."
+msgstr ""
+"Questa versione di IBM SPSS Statistics non supporta\ni caratteri estesi nelle definizioni di macro. Alcune macro non saranno definite."
+
+#: SPSSINC_PROCESS_FILES.py:405
+msgid "Inserting beforesyntax file: %s."
+msgstr ""
+"Inserimento del file beforesyntax: %s."
+
+#: SPSSINC_PROCESS_FILES.py:408
+msgid "Serious error processing BEFORE file: %s.  Stopping"
+msgstr ""
+"Errore grave durante l'elaborazione del file BEFORE: %s. Arresto in corso"
+
+#: SPSSINC_PROCESS_FILES.py:412
+msgid "Defining: %(input)s and INSERTing %(syntax)s"
+msgstr ""
+"Definizione: %(input)s e inserimento (INSERT) di %(syntax)s"
+
+#: SPSSINC_PROCESS_FILES.py:421
+msgid "Continuing"
+msgstr ""
+"L'elaborazione procede"
+
+#: SPSSINC_PROCESS_FILES.py:421
+msgid "Serious error processing: %s.  %s"
+msgstr ""
+"Errore grave durante l'elaborazione: %s.  %s"
+
+#: SPSSINC_PROCESS_FILES.py:421
+msgid "Stopping"
+msgstr ""
+"Arresto in corso"
+
+#: SPSSINC_PROCESS_FILES.py:425 SPSSINC_PROCESS_FILES.py:437
+#: SPSSINC_PROCESS_FILES.py:460
+msgid "Writing %s"
+msgstr ""
+"Scrittura di %s"
+
+#: SPSSINC_PROCESS_FILES.py:429
+msgid "Error writing data file"
+msgstr ""
+"Errore durante la scrittura del file di dati"
+
+#: SPSSINC_PROCESS_FILES.py:432
+msgid "Warning: file overwritten: %s"
+msgstr ""
+"Avviso: file sovrascritto: %s"
+
+#: SPSSINC_PROCESS_FILES.py:441
+msgid "Error writing Viewer file"
+msgstr ""
+"Errore durante la scrittura del file del Visualizzatore"
+
+#: SPSSINC_PROCESS_FILES.py:446
+msgid "Warning: Output file overwritten: %s"
+msgstr ""
+"Avviso: file di output sovrascritto: %s"
+
+#: SPSSINC_PROCESS_FILES.py:455
+msgid "Inserting aftersyntax file: %s."
+msgstr ""
+"Inserimento del file aftersyntax: %s."
+
+#: SPSSINC_PROCESS_FILES.py:458
+msgid "Serious error processing AFTER file: %s."
+msgstr ""
+"Errore grave durante l'elaborazione del file AFTER: %s."
+
+#: SPSSINC_PROCESS_FILES.py:489
+msgid ": CLOSING LOG"
+msgstr ""
+": CHIUSURA DEL LOG"
+
+#: SPSSINC_PROCESS_FILES.py:521
+msgid "Bad format in filelist file: %s"
+msgstr ""
+"Formato errato nel file filelist: %s"
+
+#: SPSSINC_PROCESS_FILES.py:551
+msgid "Relative paths cannot be specified with a drive letter: %s"
+msgstr ""
+"I percorsi relativi non possono essere specificati con una lettera di unità: %s"
+
+#: SPSSINC_PROCESS_FILES.py:555
+msgid "Directory or file does not exist: %s"
+msgstr ""
+"La cartella o il file non esistono: %s"
+
+
+
