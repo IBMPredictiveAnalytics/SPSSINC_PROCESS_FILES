@@ -1,11 +1,13 @@
 # SPSSINC PROCESS FILES
 ## Apply a file of syntax to a set of data files
- This procedure applies a file of syntax to each of a grou  p of selected files. It defines file handles and macros for use in th  e syntax file, and provides various options for handling Viewer and d  ata output.
+ This procedure applies a file of syntax to each of a group of selected files. It defines file handles and macros for use in the syntax file, and provides various options for handling Viewer and data output.
 
 ---
 Requirements
 ----
-- IBM SPSS Statistics 18 or later
+- IBM SPSS Statistics 18 or later and the corresponding IBM SPSS Statistics-Integration Plug-in for Python.
+
+Note: For users with IBM SPSS Statistics version 22 or higher, the SPSSINC PROCESS FILES extension is installed as part of IBM SPSS Statistics-Essentials for Python.
 
 ---
 Installation intructions
