@@ -1,7 +1,7 @@
-from __future__ import with_statement
+
 #Licensed Materials - Property of IBM
 #IBM SPSS Products: Statistics General
-#(c) Copyright IBM Corp. 2010, 2014
+#(c) Copyright IBM Corp. 2010, 2020
 #US Government Users Restricted Rights - Use, duplication or disclosure 
 #restricted by GSA ADP Schedule Contract with IBM Corp.
 import spss, spssaux
@@ -187,7 +187,7 @@ def Run(args):
     #except:
         #pass
 
-    args = args[args.keys()[0]]
+    args = args[list(args.keys())[0]]
 
     oobj = Syntax([
         Template("FILELIST", subc="",  ktype="literal", var="filelist"),
@@ -226,7 +226,7 @@ def Run(args):
         def _(msg):
             return msg
     # A HELP subcommand overrides all else
-    if args.has_key("HELP"):
+    if "HELP" in args:
         #print helptext
         helper()
     else:
@@ -246,7 +246,7 @@ def helper():
     # webbrowser.open seems not to work well
     browser = webbrowser.get()
     if not browser.open_new(helpspec):
-        print("Help file not found:" + helpspec)
+        print(("Help file not found:" + helpspec))
 try:    #override
     from extension import helper
 except:
@@ -296,11 +296,11 @@ omsend."""
     global unicodeit   #hate to do this
     def unicodeit(value):
         if isinstance(value, (int, float)):
-            return unicode(value)
+            return str(value)
         if value is None:
             return value
-        if not isinstance(value, unicode):
-            return  unicode(value, myenc)
+        if not isinstance(value, str):
+            return  str(value, myenc)
         else:
             return value
     
@@ -345,7 +345,7 @@ omsend."""
     logfile = tiltslash(unescape(logfile))
     if logfile and os.path.isdir(logfile):
         logfile = fixloc(logfile, cwd)
-        logfile = unicodeit(logfile + u"LOG.TXT")
+        logfile = unicodeit(logfile + "LOG.TXT")
 
     inputsource = unicodeit(inputdata or filelist)
     outnameset = set()
@@ -393,8 +393,8 @@ omsend."""
             except (UnicodeEncodeError, UnicodeDecodeError):
                 # do not translate this message
                 if not warned:
-                    print _("""This version of IBM SPSS Statistics does not support 
-extended characters in macro definitions.  Some macros will not be defined.""")
+                    print(_("""This version of IBM SPSS Statistics does not support 
+extended characters in macro definitions.  Some macros will not be defined."""))
                     warned = True
                     
             spss.Submit(filehandlesyn % (macroname[1:] + "_INPUTFILE", input))
@@ -576,7 +576,7 @@ def fixloc(item, cwd, isdir=False):
     return dname + "/" + bname
 
 escapemapping = \
-    {"\t": r"\t", "\n":r"\n", "\r": r"\r", "\'":r"\'", "\a":r"\a","\b":r"\b", "\f":r"\f","\N":r"\N", "\v":r"\v"}
+    {"\t": r"\t", "\n":r"\n", "\r": r"\r", "\'":r"\'", "\a":r"\a","\b":r"\b", "\f":r"\f","\\N":r"\N", "\v":r"\v"}
 
 def unescape(item):
     "Undo any escape sequences due to the UP"
