@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=utf-8">
+
+  <title>將語法檔案套用至一組資料檔案</title>
+  <style type="text/css">
+
+  <!-- 
+
+  H1 {font-weight:bold; color:#006699; font-size:125%; }
+  H2 {font-weight:bold; color:#006699; font-size:110%; }
+  TABLE {font-size:100%;}
+
+  /* paragraph tags */
+  .step {text-indent: -1.3em; margin-left:1.3em; margin-top: 0px;}
+  .menuselection {margin-left:10px}
+  .bullet {list-style-type: disc;margin-top:12px; margin-left:36px; text-indent:-1em; }
+  .codeblock {background-color: #ffffe6; display:block; margin-left:5px; padding:5px;}
+
+  /* inline tags */
+  .screen {font-weight:bold; color:#408080}                       /*** used refer to on-screen text ***/
+  .name {font-style: italic}                                                       /*** used to tag names, such as variable names, file names, and so forth ***/
+  .runinhead {font-weight: bold} 
+  .superscript {vertical-align:super; font-size:80%}
+  .subscript {vertical-align:sub; font-size:80%}
+
+
+  --> 
+  </style>
+</head>
+
+<body>
+  <h1>將語法檔案套用至一組資料檔案</h1>此程序提供一種方式，用於在資料檔案集合中形成迴圈，並將一組相同的語法套用至每一個資料檔案。語法可以包含任何指令。會提供巨集和檔案控點來參照輸入及輸出規格。<p>將此程序與 SPSSINC SPLIT DATASET 組合使用可能會十分便利，如此即可根據分割變數的值來分解資料集。</p>
+
+  <p><span class="runinhead">透過萬用字元表示式指定的輸入資料檔案。</span> 選擇要處理的目錄，並選擇性地指定檔案型樣。例如，<br>
+  c:\mydata\x*.sav<br>
+  將處理 c:\mydata 目錄中名稱以字母 x 開頭的所有 sav 檔案。</p>
+
+  <p class="bullet">• 如果未給定檔名表示式，則假設為 *.sav。</p>
+
+  <p class="bullet">• 您必須選擇此選項或下列<span class="screen">輸入資料</span>選項，但不要同時選擇二者。</p>
+
+  <p><span class="runinhead">在檔案中指定的輸入資料檔案。</span> 處理在指定的檔案中列出的所有檔案。SPSSINC SPLIT DATASET 指令可以產生正確格式的檔案。</p>
+
+  <p class="bullet">• 您必須選擇此選項或之前的<span class="screen">輸入資料</span>選項，但不要同時選擇二者。</p>
+
+  <p><span class="runinhead">要為每個資料檔案執行的語法檔案。</span> 將為每個輸入資料集呼叫語法檔案。它應讀取檔案並執行任何所需的作業。定義檔案控點和巨集來參照輸入檔及各種輸出位置。檔案控點如下所示。</p>
+
+  <ul>
+    <li>JOB_INPUTFILE：輸入檔。</li>
+
+    <li>JOB_DATADIR：輸入資料目錄</li>
+
+    <li>JOB_OUTPUTDATADIR：指定的輸出資料目錄或 <i>&lt;NONE&gt;</i></li>
+
+    <li>JOB_VIEWERDIR：指定的檢視器輸出目錄或 <i>&lt;NONE&gt;</i></li>
+  </ul>
+
+  <p class="bullet">• 對於 SAV 檔案，您可以使用此指令讀取資料：<br>
+  GET FILE="JOB_INPUTFILE"。</p>
+
+  <p class="bullet">• 巨集是使用這些相同名稱定義的，但以 "!" 開頭。定義其他兩個巨集。</p>
+
+  <ul>
+    <li>!JOB_DATAFILEROOT：輸入資料檔案的名稱，沒有副檔名</li>
+
+    <li>!JOB_DATAFILEEXT：輸入資料檔案的副檔名</li>
+  </ul>
+
+  <p>文字 <i>!JOB</i> 或 <i>JOB</i> 由根名稱控制項中指定的根名稱取代。</p>
+
+  <p class="bullet">• 巨集文字以引號括住。可透過下面的程式碼範例，使用副檔名為 .xls 的資料檔案名稱將檢視器內容匯出至指定的檢視器目錄。<br></p>
+
+  <p class="code">DEFINE !out ()
+  !QUOTE(!CONCAT(!EVAL(!UNQUOTE(!JOB_VIEWERDIR)), "/",
+  !EVAL(!unquote(!JOB_DATAFILEROOT)), ".xls"))<br>
+  !ENDDEFINE.<br>
+  OUTPUT EXPORT /XLS DOCUMENTFILE =!out.</p>
+
+  <p><span class="runinhead">輸出資料檔案的目錄。</span> 如果已指定，對於每個資料集，資料檔案將在語法完成後作為 .sav 檔案寫入該目錄。為一組檔案執行轉換時，此選項十分有用。當然，您可以將此欄位保留空白，並寫入您選擇的任何資料檔案輸出。JOB_OUTPUTDATADIR 檔案控點或 !JOB_OUTPUTDATADIR 巨集可識別此指令中指定的資料輸出位置</p>
+
+  <p><span class="runinhead">檢視器輸出。</span> 檢視器輸出可以針對每個資料檔案儲存在個別檔案中，也可以針對整個工作儲存為單一檔案。選取適當的圓鈕，並輸入目錄名稱或檔案規格。如果選擇寫入單一檔案，但僅在下列控制項中輸入目錄，檔案將命名為 <i>VIEWER.SPV</i>。該控制項的「瀏覽」按鈕僅容許指定目錄，但您可以鍵入檔名。</p>
+
+  <p><span class="runinhead">將工作日誌寫入檔案。</span> 為工作日誌指定檔案。該日誌會列出程序已處理和寫入的檔案，每個檔案都有時間戳記。</p>
+
+  <p class="bullet">• 不記錄由語法檔案執行的作業。</p>
+
+  <p class="bullet">• 如果在處理檔案時發生嚴重錯誤，日誌中將有錯誤項目。</p>
+
+  <p><span class="runinhead">在處理前要執行的語法。</span> 您可以指定將在開始處理輸入檔之前執行一次的語法檔案。將針對處理清單中的第一個檔案定義巨集和檔案控點。如果發生嚴重錯誤，會停止處理。</p>
+
+  <p><span class="runinhead">在所有處理後要執行的語法。</span> 您可以指定將在處理所有輸入檔之後執行一次的語法檔案。將針對處理清單中的最後一個檔案定義巨集和檔案控點。</p>
+
+  <h2>選項</h2>
+
+  <p><span class="runinhead">日誌檔模式。</span> 選擇是將工作的日誌項目附加到現有檔案還是取代內容。</p>
+
+  <p><span class="runinhead">在每個步驟之後處理的資料檔案。</span> 選擇<span class="screen">關閉</span>，在處理輸入檔的每次反覆運算之後關閉所有資料集。如果將多個資料集組合為一個，在每個步驟之後讓資料集保持開啟會十分有用。最終資料集可以在此指令完成之後儲存。</p>
+
+  <p><span class="runinhead">錯誤處理。</span> 如果發生錯誤，您可以選擇是繼續處理下一個資料檔案，還是停止進一步處理任何檔案。如果可以的話，即使指定停止，也仍然會為導致錯誤的資料檔案寫入輸出資料和檢視器檔案。</p>
+
+  <p><span class="runinhead">巨集和檔案控點的根名稱。</span> 依預設，定義的檔案控點和巨集字首分別為 JOB 和 !JOB，分別後接底線。您可以指定不同的字首來代替 JOB。巨集的字首前面將附加有 !。<i>!</i>。</p>
+
+  <h2>巨集定義</h2>
+
+  <p>使用此子對話框來定義可在語法檔案中使用的您自己的巨集。您可以最多定義名為 !PARM1 至 !PARM5 的五個巨集，其值將為一般語法或變數名稱，還可以最多定義名為 !QPARM1 至 !QPARM5 的五個巨集，其值將為用引號括住的文字字串。用引號括住的字串對轉換中的標題或字串表示式十分有用。</p>
+
+  <p><span class="runinhead">值未用引號括住的巨集。</span> 輸入代表任何 SPSS 語法的任何巨集文字，應顯示為不使用引號。</p>
+
+  <p><span class="runinhead">值為用引號括住的文字的巨集。</span> 輸入代表 SPSS 語法的任何巨集文字（例如，標題、標籤或檔名），應顯示在引號中。</p>
+
+  <p class="bullet">• 如果需要在定義中用引號括住文字，請使用單引號 (')。產生的巨集文字將用雙引號 (") 括住。</p>
+
+  <h3>要在資料檔案中搜尋特定觀察值 ID 的巨集範例</h3>假設部分檔案集具有名為 PatientID 的 ID 變數，並且您要尋找出現的所有 "Johann Schmidt" ID。您可以在語法檔案中使用下列片段。<code><br>
+  SELECT IF !PARM1 EQ !QPARM1.<br>
+  FREQUENCIES !PARM1.</code><br>
+  其中，在 PARM1 欄位中輸入 PatientID，在 QPARM1 欄位中輸入 Johann Schmidt。
+<p class="bullet">• 將「錯誤處理」參數設為「繼續處理下一個檔案」，因為如果未選取任何觀察值，FREQUENCIES 指令將會產生錯誤。（OMS 可用於暫停產生的「警告」表格。）</p>
+
+  <p class="bullet">• 將檢視器輸出寫入單一檔案以便檢視結果。</p>
+
+  <h2>資料搜尋公用程式</h2>請參閱「編輯」&gt;「搜尋資料檔案」，以取得使用此指令在一組 SAV 檔案中搜尋觀察值的對話框。
+  <h2>其他特性</h2>執行指令<br>
+  SPSSINC PROCESS FILES /HELP.<br>
+  以顯示整個語法說明。使用語法，可將輸出寫入到 SPSS Processor 的現行工作目錄。指令 SHOW DIRECTORY 會顯示該目錄的名稱。
+
+  <p>為了使用檔案來指定應處理的檔案，請建立每行一個名稱（包含檔案路徑）的檔案。名稱必須用雙引號 (") 括住。將忽略該行上後面部分的任何內容。將忽略空白行和以 # 開頭的行。</p>
+
+  <h2>需求</h2>此指令需要 Python Programmability Plug-in，您可以在 IBM SPSS Statistics CD 上找到 Python 外掛程式，也可以從 SPSS Developer Central (www.spss.com/devcentral) 下載。<hr>
+
+  <p style="font-size:80%;">© Copyright IBM Corp. 1989, 2013</p>
+</body>
+</html>

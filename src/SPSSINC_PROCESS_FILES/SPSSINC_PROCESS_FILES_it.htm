@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=utf-8">
+
+  <title>Applica un file di sintassi a un insieme di file di dati</title>
+  <style type="text/css">
+
+  <!-- 
+
+  H1 {font-weight:bold; color:#006699; font-size:125%; }
+  H2 {font-weight:bold; color:#006699; font-size:110%; }
+  TABLE {font-size:100%;}
+
+  /* paragraph tags */
+  .step {text-indent: -1.3em; margin-left:1.3em; margin-top: 0px;}
+  .menuselection {margin-left:10px}
+  .bullet {list-style-type: disc;margin-top:12px; margin-left:36px; text-indent:-1em; }
+  .codeblock {background-color: #ffffe6; display:block; margin-left:5px; padding:5px;}
+
+  /* inline tags */
+  .screen {font-weight:bold; color:#408080}                       /*** used refer to on-screen text ***/
+  .name {font-style: italic}                                                       /*** used to tag names, such as variable names, file names, and so forth ***/
+  .runinhead {font-weight: bold} 
+  .superscript {vertical-align:super; font-size:80%}
+  .subscript {vertical-align:sub; font-size:80%}
+
+
+  --> 
+  </style>
+</head>
+
+<body>
+  <h1>Applica un file di sintassi a un insieme di file di dati</h1>Questa procedura
+offre un modo per scorrere una raccolta di file di dati e applicare
+  lo stesso insieme di sintassi a ciascun file. La sintassi può contenere qualsiasi comando. Le macro e gli handle del file sono forniti per fare riferimento
+  agli input e alle specifiche di output.
+
+  <p>Può risultare pratico utilizzare questa procedura insieme a
+  SPSSINC SPLIT DATASET, che può suddividere un dataset in base ai
+  valori di una variabile di suddivisione.</p>
+
+  <p><span class="runinhead">File di dati di input specificati dall'espressione jolly</span> Scegliere
+una cartella da elaborare e, facoltativamente, specificare un modello di file. Ad esempio,<br>
+  c:\mydata\x*.sav<br>
+  elabora tutti i file sav nella cartella c:\mydata i cui nomi iniziano con la lettera x.</p>
+
+  <p class="bullet">• Se non viene fornita alcuna espressione nome-file, si presume il valore *.sav.</p>
+
+  <p class="bullet">• È necessario scegliere questa opzione oppure la
+  seguente opzione <span class="screen">Dati di input</span>, ma non
+  entrambe.</p>
+
+  <p><span class="runinhead">File di dati di input specificati in un file.</span> Elaborare tutti i file elencati nel file specificato.
+  Il
+comando SPSSINC SPLIT DATASET può produrre un file nel formato corretto.</p>
+
+  <p class="bullet">• È necessario scegliere questa opzione oppure l'opzione precedente
+<span class="screen">Dati di input</span>, ma non
+  entrambe.</p>
+
+  <p><span class="runinhead">File di sintassi da eseguire per ogni file di dati.</span> Il file di sintassi verrà richiamato per ogni dataset di input. Deve
+leggere il file ed eseguire le operazioni desiderate. Gli handle del file e le macro sono definiti per fare riferimento
+  al file di input e alle diverse ubicazioni di output. Gli handle del file sono riportati di seguito.</p>
+
+  <ul>
+    <li>JOB_INPUTFILE: il file di input.</li>
+
+    <li>JOB_DATADIR: la cartella dei dati di input</li>
+
+    <li>JOB_OUTPUTDATADIR: la cartella dei dati di output specificata o
+    <i>&lt;NONE&gt;</i></li>
+
+    <li>JOB_VIEWERDIR: la cartella di output del Visualizzatore specificata o <i>&lt;NONE&gt;</i></li>
+  </ul>
+
+  <p class="bullet">• Per un file SAV è possibile leggere i dati con il comando<br>
+  GET FILE="JOB_INPUTFILE".</p>
+
+  <p class="bullet">• Le macro sono definite con questi stessi nomi, ma iniziano con
+"!". Sono definite altre due macro.</p>
+
+  <ul>
+    <li>!JOB_DATAFILEROOT: il nome del file di dati di input senza l'estensione</li>
+
+    <li>!JOB_DATAFILEEXT: l'estensione del file di dati di input</li>
+  </ul>
+
+  <p>Il testo <i>!JOB</i> o <i>JOB</i> viene sostituito dal nome radice specificato nel controllo nome radice.</p>
+
+  <p class="bullet">• Il testo della macro è racchiuso tra virgolette. Il seguente è
+  un esempio del codice che può essere utilizzato per esportare il contenuto del Visualizzatore nella cartella
+del Visualizzatore specificata utilizzando il nome del file di dati con estensione
+.xls.<br></p>
+
+  <p class="code">DEFINE !out ()
+  !QUOTE(!CONCAT(!EVAL(!UNQUOTE(!JOB_VIEWERDIR)), "/",
+  !EVAL(!unquote(!JOB_DATAFILEROOT)), ".xls"))<br>
+  !ENDDEFINE.<br>
+  OUTPUT EXPORT /XLS DOCUMENTFILE =!out.</p>
+
+  <p><span class="runinhead">Cartella per i file di dati di output.</span> Se specificata, per ogni dataset il file di dati verrà
+  scritto come un file .sav in tale cartella dopo il completamento
+  della sintassi. Ciò può essere utile quando si eseguono le trasformazioni
+  per un insieme di file. Naturalmente, è possibile lasciare questo campo
+  vuoto e scrivere qualsiasi output di file di dati si scelga. L'handle del file
+  JOB_OUTPUTDATADIR o la macro !JOB_OUTPUTDATADIR identificano l'ubicazione di
+  output dei dati specificata in questo comando</p>
+
+  <p><span class="runinhead">Output visualizzatore.</span> L'output del
+  Visualizzatore può essere salvato in un file separato per ogni file di dati
+  oppure come un singolo file per l'intero lavoro. Selezionare il pulsante
+  di scelta appropriato oppure immettere un nome di cartella o una
+  specifica di file. Se si sceglie di scrivere un singolo file, ma si immette
+  solo una cartella nel seguente controllo, il file sarà denominato
+  <i>VIEWER.SPV</i>. Il pulsante Sfoglia per questo controllo consente di
+  specificare solo una cartella, ma è possibile immettere un nome file.</p>
+
+  <p><span class="runinhead">Scrivi log lavori su file.</span> Specificare un file per il log lavori. Il log elenca i file elaborati e scritti
+  dalla procedura, ciascuno con una data/ora.</p>
+
+  <p class="bullet">• Le operazioni eseguire dal file di sintassi non vengono registrate.</p>
+
+  <p class="bullet">• Se si verifica un errore grave durante l'elaborazione di
+  un file, nel log sarà presente una voce di errore.</p>
+
+  <p><span class="runinhead">Sintassi da eseguire prima dell'elaborazione.</span> È possibile specificare un file
+   di sintassi che verrà eseguito una volta prima dell'inizio
+   dell'elaborazione del file di input. Le macro e gli
+  handle del file saranno definiti come per il primo file
+ nell'elenco di elaborazione. Se si verifica un errore grave,
+  l'elaborazione viene arrestata.</p>
+
+  <p><span class="runinhead">Sintassi da eseguire dopo tutta l'elaborazione.</span> È possibile specificare un file
+   di sintassi che verrà eseguito una volta dopo l'elaborazione di tutti i file di input. Le macro e gli
+  handle del file saranno definiti come per l'ultimo file
+ nell'elenco di elaborazione.</p>
+
+  <h2>Opzioni</h2>
+
+  <p><span class="runinhead">Modalità file di log.</span> Scegliere se le
+  voci di log per il lavoro vengono accodate a un file esistente o
+  se sostituiscono il contenuto.</p>
+
+  <p><span class="runinhead">Elaborazione del file di dati dopo ogni fase.</span> Scegliere <span class="screen">Chiudi</span> per fare
+  in modo che tutti i dataset vengano chiusi dopo ogni iterazione di
+  elaborazione di file di input.
+  Lasciare i dataset aperti dopo ogni fase è utile se si stanno combinando
+  molti dataset in uno. Non è stato possibile salvare il dataset finale
+  dopo il completamento di questo comando.</p>
+
+  <p><span class="runinhead">Gestione errori.</span> Se si
+  verifica un errore, è possibile scegliere se continuare l'elaborazione
+  con il successivo file di dati oppure se arrestare l'elaborazione degli altri file. Se possibile, i dati di output e i file
+  del Visualizzatore saranno comunque scritti per il file di dati che ha
+causato l'errore, anche se si specifica l'opzione di arresto.</p>
+
+  <p><span class="runinhead">Nome radice per macro e handle del file.</span> Per impostazione predefinita, gli handle del file e
+  le macro definiti hanno, rispettivamente, il prefisso JOB e !JOB, seguito
+  da un carattere di sottolineatura. È possibile specificare un prefisso differente al posto di JOB.
+  Alle macro verrà anteposto il prefisso ! .<i>!</i>.</p>
+
+  <h2>Definizioni di macro</h2>
+
+  <p>Utilizzare questa finestra di dialogo secondaria per definire macro personalizzate
+  che possono essere utilizzate nel file di sintassi. È possibile definire fino
+  a cinque macro con denominazioni che vanno da !PARM1 a !PARM5, i cui valori saranno dei
+ nomi di variabile o sintassi ordinari e fino a cinque macro con denominazioni
+che vanno da !QPARM1 a !QPARM5, i cui valori saranno delle stringhe. Le stringhe tra virgolette sono utili
+  per i titoli o le espressioni stringa nelle trasformazioni.</p>
+
+  <p><span class="runinhead">Macro dove i valori non sono racchiusi tra virgolette.</span> Immettere il testo della macro che rappresenta la
+   sintassi SPSS che deve essere visualizzato senza virgolette.</p>
+
+  <p><span class="runinhead">Macro dove il valore è letterale racchiuso tra virgolette.</span> Immettere il testo della macro che rappresenta la
+   sintassi SPSS che deve essere visualizzata tra virgolette, ad esempio, un titolo, un'etichetta o un nome file.</p>
+
+  <p class="bullet">• Utilizzare gli apici (') se occorre racchiudere tra
+  virgolette dei valori letterali nella definizione. Il testo di macro generato sarà racchiuso
+  tra virgolette (").</p>
+
+  <h3>Un esempio di macro per ricerca in file di dati uno specifico ID caso</h3>Si supponga che un insieme di file abbia una variabile
+  ID denominata PatientID e che si desideri trovare tutte le occorrenze dell'ID
+  "Johann Schmidt". È possibile utilizzare il seguente frammento nel file di sintassi. <code><br>
+  SELECT IF !PARM1 EQ !QPARM1.<br>
+  FREQUENCIES !PARM1.</code><br>
+  immettendo PatientID nel campo PARM1 e Johann Schmidt
+nel campo QPARM1.
+
+  <p class="bullet">• Impostare il parametro Gestione errori per continuare
+  con il file successivo poiché, se non viene selezionato alcun caso,
+  il comando FREQUENCIES genererà un errore. È possibile utilizzare SGO per eliminare la
+  tabella Avvisi risultante.</p>
+
+  <p class="bullet">• Scrivere l'output del Visualizzatore in un singolo file per
+facilitare la visualizzazione del risultato.</p>
+
+  <h2>Un programma di utilità di ricerca dati</h2>Vedere Modifica&gt;Ricerca in file di dati
+per una finestra di dialogo che utilizza questo comando per cercare i casi in un insieme di file SAV.
+
+  <h2>Funzioni aggiuntive</h2>Eseguire il comando<br>
+  SPSSINC PROCESS FILES /HELP.<br>
+  per visualizzare la descrizione della sintassi completa. Utilizzando la sintassi,
+  l'output può essere scritto nella cartella di lavoro corrente del
+  processore SPSS. Il comando SHOW DIRECTORY visualizza il nome di quella cartella.
+
+  <p>Per utilizzare un file per specificare i file che devono essere
+  elaborati, creare un file con un singolo nome per riga,
+  includendo il percorso del file. Il nome deve essere racchiuso tra virgolette (").
+  Quanto viene dopo sulla riga viene ignorato. Le righe vuote e le righe che iniziano con # vengono ignorate.</p>
+
+  <h2>Requisiti</h2>Questo comando richiede il plug-in Python Programmability.
+Il plug-in Python è disponibile sul CD di IBM SPSS Statistics CD oppure è possibile scaricarlo da
+SPSS Developer Central (www.spss.com/devcentral).
+  <hr>
+
+  <p style="font-size:80%;">© Copyright IBM Corp. 1989, 2013</p>
+</body>
+</html>

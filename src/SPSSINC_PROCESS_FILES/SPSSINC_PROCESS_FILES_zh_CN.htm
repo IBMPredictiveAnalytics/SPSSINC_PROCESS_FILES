@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=utf-8">
+
+  <title>将语法文件应用于一组数据文件</title>
+  <style type="text/css">
+
+  <!-- 
+
+  H1 {font-weight:bold; color:#006699; font-size:125%; }
+  H2 {font-weight:bold; color:#006699; font-size:110%; }
+  TABLE {font-size:100%;}
+
+  /* paragraph tags */
+  .step {text-indent: -1.3em; margin-left:1.3em; margin-top: 0px;}
+  .menuselection {margin-left:10px}
+  .bullet {list-style-type: disc;margin-top:12px; margin-left:36px; text-indent:-1em; }
+  .codeblock {background-color: #ffffe6; display:block; margin-left:5px; padding:5px;}
+
+  /* inline tags */
+  .screen {font-weight:bold; color:#408080}                       /*** used refer to on-screen text ***/
+  .name {font-style: italic}                                                       /*** used to tag names, such as variable names, file names, and so forth ***/
+  .runinhead {font-weight: bold} 
+  .superscript {vertical-align:super; font-size:80%}
+  .subscript {vertical-align:sub; font-size:80%}
+
+
+  --> 
+  </style>
+</head>
+
+<body>
+  <h1>将语法文件应用于一组数据文件</h1>此过程提供了一种针对一组数据文件执行循环并对其中每个文件应用同一组语法的方法。此语法可以包含任何命令。提供了用于引用输入以及输出指定项的宏和文件句柄。
+  <p>此过程可以方便地与 SPSSINC SPLIT DATASET 结合使用，后者可以根据拆分变量的值来分解数据集。</p>
+
+  <p><span class="runinhead">由通配符表达式指定的输入数据文件</span>。请选择要处理的目录，并选择性地指定文件模式。例如，<br>
+  c:\mydata\x*.sav<br> 将处理 c:\mydata 目录中名称以字母 x 开头的所有 sav 文件。</p>
+
+  <p class="bullet">• 如果未指定文件名表达式，那么将假设为 *.sav。</p>
+
+  <p class="bullet">• 您必须选择此选项或者下面的<span class="screen">输入数据</span>选项，但不得同时选择这两个选项。</p>
+
+  <p><span class="runinhead">文件中指定的输入数据文件</span>。处理指定文件中列示的所有文件。SPSSINC SPLIT DATASET 命令能够以正确的格式生成文件。</p>
+
+  <p class="bullet">• 您必须选择此选项或者上面的<span class="screen">输入数据</span>选项，但不得同时选择这两个选项。</p>
+
+  <p><span class="runinhead">要对每个数据文件执行的语法文件。</span>将针对每个输入数据集调用此语法文件。应该读取此文件，并执行所有期望的操作。定义了用于引用输入文件和各种输出位置的文件句柄和宏。文件句柄如下所示。</p>
+
+  <ul>
+    <li>JOB_INPUTFILE：输入文件</li>
+
+    <li>JOB_DATADIR：输入数据目录</li>
+
+    <li>JOB_OUTPUTDATADIR：指定的输出数据目录或 <i>&lt;NONE&gt;</i></li>
+
+    <li>JOB_VIEWERDIR：指定的查看器输出目录或 <i>&lt;NONE&gt;</i></li>
+  </ul>
+
+  <p class="bullet">• 对于 SAV 文件，可以使用<br>GET FILE="JOB_INPUTFILE" 命令来读取数据。</p>
+
+  <p class="bullet">• 宏也以这些名称（不同之处在于以“!”开头）进行定义。定义了两个附加的宏。</p>
+
+  <ul>
+    <li>!JOB_DATAFILEROOT：不含扩展名的输入数据文件名</li>
+
+    <li>!JOB_DATAFILEEXT：输入数据文件的扩展名</li>
+  </ul>
+
+  <p>文本 <i>!JOB</i> 或 <i>JOB</i> 将替换为根名称控件中指定的根名称。</p>
+
+  <p class="bullet">• 宏文本括在引号内。以下代码示例使用扩展名为 .xls 的数据文件名将查看器内容导出到指定的查看器目录。<br></p>
+
+  <p class="code">DEFINE !out ()
+  !QUOTE(!CONCAT(!EVAL(!UNQUOTE(!JOB_VIEWERDIR)), "/",
+  !EVAL(!unquote(!JOB_DATAFILEROOT)), ".xls"))<br>
+  !ENDDEFINE.<br>
+  OUTPUT EXPORT /XLS DOCUMENTFILE =!out.</p>
+
+  <p><span class="runinhead">输出数据文件的目录</span>。如果进行了指定，那么对于每个数据集，在语法完成后，数据文件将作为 .sav 文件写入该目录。这在对一组文件执行转换时十分有用。当然，您可以保留此字段为空，然后编写您选择的任何数据文件输出。JOB_OUTPUTDATADIR 文件句柄或 !JOB_OUTPUTDATADIR 宏确定了此命令中指定的数据输出位置</p>
+
+  <p><span class="runinhead">查看器输出</span>。可以针对每个数据文件在不同文件中保存查看器输出，也可以针对整个作业将查看器输出保存为单个文件。请选择相应的单选按钮，然后输入目录名或者文件指定项。如果您选择写入单个文件，但在下一个控件中仅输入了目录，那么该文件将命名为 <i>VIEWER.SPV</i>。该控件的“浏览”按钮仅允许指定目录，但您可以输入文件名。</p>
+
+  <p><span class="runinhead">将作业日志写入文件</span>。请为作业日志指定文件。该日志将列出此过程所处理并写入的文件，并且每个文件都带有时间戳记。</p>
+
+  <p class="bullet">• 不记录语法文件所执行的操作。</p>
+
+  <p class="bullet">• 如果处理文件时发生了严重错误，那么日志将包含一个错误条目。</p>
+
+  <p><span class="runinhead">要在处理开始前执行的语法</span>。您可以指定要在开始处理输入文件前执行一次的语法文件。将定义针对处理列表中的第一个文件的宏和文件句柄。如果发生严重错误，那么将停止处理。</p>
+
+  <p><span class="runinhead">要在所有处理完成后执行的语法</span>。您可以指定要在处理所有输入文件完成后执行一次的语法文件。将定义针对处理列表中的最后一个文件的宏和文件句柄。</p>
+
+  <h2>选项</h2>
+
+  <p><span class="runinhead">日志文件方式</span>。选择是将作业的日志条目追加到现有文件末尾，还是替换内容。</p>
+
+  <p><span class="runinhead">完成每个步骤后的数据文件处理</span>。选择<span class="screen">关闭</span>表示在输入文件处理的每次迭代后都关闭所有数据集。如果要将多个数据集合并为一个，那么在每个步骤完成后保持数据集处于打开状态十分有用。在此命令完成后，可以保存最终数据集。</p>
+
+  <p><span class="runinhead">错误处理</span>。您可以选择发生错误后是继续处理下一个数据文件还是停止处理任何后续文件。在有可能时，仍将针对引起错误的数据文件编写输出数据和查看器文件，即使指定了停止处理也是如此。</p>
+
+  <p><span class="runinhead">宏和文件句柄的根名称</span>。缺省情况下，定义的文件句柄和宏分别具有前缀
+JOB 和 !JOB，后面跟有下划线。您可以指定其他前缀来替代 JOB。对于宏，将在前缀前面添加 <i>!</i>。</p>
+
+  <h2>宏定义</h2>
+
+  <p>使用这个子对话框可以定义您自己的可以在语法文件中使用的宏。最多可以定义 5 个名为
+!PARM1 到 !PARM5 的宏，这些宏的值将是普通语法或变量名；最多可以定义 5 个名为
+!QPARM1 到 !QPARM5 的宏，这些宏的值将是括在引号内的文字串。括在引号内的字符串对转换中的标题或字符串表达式十分有用。</p>
+
+  <p><span class="runinhead">值不括在引号内的宏</span>。请输入任意表示不应括在引号内显示的 SPSS 语法的宏文本。</p>
+
+  <p><span class="runinhead">值为括在引号内的字面值的宏</span>。请输入任意表示应该括在引号内显示的 SPSS 语法（例如标题、标签或文件名）的宏文本。</p>
+
+  <p class="bullet">• 如果需要将定义中的字面值括在引号内，请使用单引号 (')。生成的宏文本将括在双引号 (") 内。</p>
+
+  <h3>宏示例：搜索特定个案 ID 的数据文件
+</h3>假设某个文件集包含名为 PatientID 的 ID 变量，您想查找标识“Johann
+Schmidt”的所有实例。您可以在语法文件中使用以下片段。<code><br>
+  SELECT IF !PARM1 EQ !QPARM1.<br>
+  FREQUENCIES !PARM1.</code><br>
+  其中，您在 PARM1 字段中输入 PatientID，在 QPARM1 字段中输入 Johann Schmidt。
+  <p class="bullet">• 由于未选择任何个案时 FREQUENCIES 命令将产生错误，因此请将“错误处理”参数设置为“继续处理下一个文件”。（可以使用 OMS 来排除生成的“警告”表。）</p>
+
+  <p class="bullet">• 将查看器输出写入单个文件，以便于查看结果。</p>
+
+  <h2>数据搜索实用程序</h2>请查看“编辑”&gt;“搜索数据文件”，以找到使用此命令在一组 SAV 文件中搜索个案的对话框。
+<h2>其他功能部件</h2>运行命令<br>
+  SPSSINC PROCESS FILES /HELP。<br>
+  可以显示整个语法描述。通过使用语法，可以将输出写入 SPSS
+处理器的当前工作目录。SHOW DIRECTORY 命令可以显示该目录的名称。
+
+  <p>为了使用一个文件来指定应该处理的多个文件，请创建一个文件，并在其中的每一行指定一个名称（包括文件路径）。名称必须括在双引号 (") 内。该行中的所有后续内容都将被忽略。空行以及以 # 开头的行将被忽略。</p>
+
+  <h2>要求</h2>此命令需要 Python Programmability 插件。您可以在
+IBM SPSS Statistics CD 上找到 Python 插件，也可以从
+SPSS Developer Central (www.spss.com/devcentral) 下载此插件。<hr>
+
+  <p style="font-size:80%;">© Copyright IBM Corp. 1989, 2013</p>
+</body>
+</html>

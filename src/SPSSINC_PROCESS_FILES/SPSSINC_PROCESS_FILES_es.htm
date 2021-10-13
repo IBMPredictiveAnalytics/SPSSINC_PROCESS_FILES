@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=utf-8">
+
+  <title>Aplicar un archivo de sintaxis a un conjunto de archivos de datos</title>
+  <style type="text/css">
+
+  <!-- 
+
+  H1 {font-weight:bold; color:#006699; font-size:125%; }
+  H2 {font-weight:bold; color:#006699; font-size:110%; }
+  TABLE {font-size:100%;}
+
+  /* paragraph tags */
+  .step {text-indent: -1.3em; margin-left:1.3em; margin-top: 0px;}
+  .menuselection {margin-left:10px}
+  .bullet {list-style-type: disc;margin-top:12px; margin-left:36px; text-indent:-1em; }
+  .codeblock {background-color: #ffffe6; display:block; margin-left:5px; padding:5px;}
+
+  /* inline tags */
+  .screen {font-weight:bold; color:#408080}                       /*** used refer to on-screen text ***/
+  .name {font-style: italic}                                                       /*** used to tag names, such as variable names, file names, and so forth ***/
+  .runinhead {font-weight: bold} 
+  .superscript {vertical-align:super; font-size:80%}
+  .subscript {vertical-align:sub; font-size:80%}
+
+
+  --> 
+  </style>
+</head>
+
+<body>
+  <h1>Aplicar un archivo de sintaxis a un conjunto de archivos de datos</h1>Este procedimiento proporciona una forma para hacer bucles a través de una colección de archivos de datos y aplicar el mismo conjunto de sintaxis a cada una. La sintaxis puede contener cualquier comando. Las macros y los identificadores de archivo se proporcionan para hacer referencia a las entradas y las especificaciones de salida.
+
+  <p>Podría ser útil utilizar este procedimiento en combinación con SPSSINC SPLIT DATASET, que puede dividir un conjunto de datos de acuerdo con los valores de una variable de segmentación.</p>
+
+  <p><span class="runinhead">Archivos de datos de entrada especificados por expresión comodín.</span> Elija un directorio para procesar y, de forma opcional, especifique un patrón de archivo. Por ejemplo,<br>
+  c:\mydata\x*.sav<br>
+  procesaría todos los archivos sav en el directorio c:\mydata cuyos nombres empiecen con la letra x.</p>
+
+  <p class="bullet">• Si no se proporciona ninguna expresión de nombre de archivo, se asume *.sav.</p>
+
+  <p class="bullet">• Debe elegir esta opción o la siguiente opción <span class="screen">Datos de entrada</span>, pero no ambas.</p>
+
+  <p><span class="runinhead">Archivos de datos de entrada especificados en un archivo</span> Procese todos los archivos listados e n el archivo especificado.
+  El comando SPSSINC SPLIT DATASET puede generar un archivo en el formato correcto.</p>
+
+  <p class="bullet">• Debe elegir esta opción o la opción <span class="screen">Datos de entrada</span> precedente, pero no ambas.</p>
+
+  <p><span class="runinhead">Archivo de sintaxis para ejecutar para cada archivo de datos.</span> El archivo de sintaxis se invocará para cada conjunto de datos de entrada. Debe leer el archivo y llevar a cabo las operaciones que desee. Los identificadores de archivo y las macros se definen para hacer referencia al archivo de entrada y las distintas ubicaciones de salida. Los identificadores de archivo son los siguientes.</p>
+
+  <ul>
+    <li>JOB_INPUTFILE: El archivo de entrada.</li>
+
+    <li>JOB_DATADIR: El directorio de los datos de entrada.</li>
+
+    <li>JOB_OUTPUTDATADIR: El directorio de datos de salida especificado o     <i>&lt;NONE&gt;</i></li>
+
+    <li>JOB_VIEWERDIR: El directorio de salida del visor especificado o     <i>&lt;NONE&gt;</i></li>
+  </ul>
+
+  <p class="bullet">• Para un archivo SAV puede leer los datos con el comando.<br>
+  GET FILE="JOB_INPUTFILE".</p>
+
+  <p class="bullet">• Las macros se definen con estos nombres iguales, excepto las que empiezan con "!". Se han definido dos macros adicionales.</p>
+
+  <ul>
+    <li>!JOB_DATAFILEROOT: El nombre del archivo de datos de entrada sin su extensión.</li>
+
+    <li>!JOB_DATAFILEEXT: La extensión del archivo de datos de entrada.</li>
+  </ul>
+
+  <p>El texto <i>!JOB</i> o <i>JOB</i> se sustituye por el nombre raíz especificado en el control de nombre raíz.</p>
+
+  <p class="bullet">• El texto de la macro está entre comillas. Aquí hay un ejemplo de código que se podría utilizar para exportar el contenido del visor al directorio del visor especificado utilizando el nombre del archivo de datos con la extensión .xls.<br></p>
+
+  <p class="code">DEFINE !out ()   !QUOTE(!CONCAT(!EVAL(!UNQUOTE(!JOB_VIEWERDIR)), "/",   !EVAL(!unquote(!JOB_DATAFILEROOT)), ".xls"))<br>
+  !ENDDEFINE.<br>
+  OUTPUT EXPORT /XLS DOCUMENTFILE =!out.</p>
+
+  <p><span class="runinhead">Directorio para los archivos de datos de salida.</span> Si se especifica, para cada conjunto de datos, el archivo de datos se grabará en un archivo .sav en dicho directorio después de que se complete la sintaxis. Esto puede ser útil al llevar a cabo transformaciones para un conjunto de archivos. Por supuesto, puede dejar este campo en blanco y grabar el resultado del archivo de datos que elija. El identificador de archivo JOB_OUTPUTDATADIR o la macro !JOB_OUTPUTDATADIR identifica la ubicación de la salida de datos especificada en este comando</p>
+
+  <p><span class="runinhead">Salida del visor.</span> La salida del visor se puede guardar en un archivo separado para cada archivo de datos o como un único archivo para todo el trabajo. Seleccione el botón de opción apropiado y entre un nombre de directorio o una especificación de archivo. Si opta por grabar un solo archivo, pero entra sólo un directorio en el control siguiente, el archivo se denominará <i>VIEWER.SPV</i>. El botón Examinar para dicho control sólo permite especificar un directorio, pero puede escribir un nombre de archivo.</p>
+
+  <p><span class="runinhead">Grabar registro de trabajo en archivo.</span> Especifique un archivo para el registro de trabajo. El registro lista los archivos procesados y grabados por el procedimiento, cada uno con una indicación de fecha y hora.</p>
+
+  <p class="bullet">• Las operaciones llevadas a cabo por el archivo de sintaxis no se registran.</p>
+
+  <p class="bullet">• Si se produce un error grave en el proceso de un archivo, habrá una entrada de error en el registro.</p>
+
+  <p><span class="runinhead">Sintaxis para ejecutar antes del proceso.</span> Puede especificar un archivo de sintaxis que se ejecutará una vez antes de que se inicie el proceso del archivo de entrada. Las macros y los identificadores de archivo se definirán como para el primer archivo de la lista de procesos. Si se produce un error grave, el proceso se detiene.</p>
+
+  <p><span class="runinhead">Sintaxis para ejecutar después de todo el proceso.</span> Puede especificar un archivo de sintaxis que se ejecutará una vez después de que se procesen todos los archivos de entrada. Las macros y los identificadores de archivo se definirán como para el último archivo de la lista de procesos.</p>
+
+  <h2>Opciones</h2>
+
+  <p><span class="runinhead">Modo de archivo de registro.</span> Elija si las entradas del registro para el trabajo se añadirá a un archivo existente o sustituirá el contenido.</p>
+
+  <p><span class="runinhead">Proceso de archivo de datos después de cada paso.</span> Elija <span class="screen">Cerrar</span> para que se cierren todos los conjuntos de datos después de cada iteración del proceso de archivo de datos.
+  Dejar los conjuntos de datos abiertos después de cada paso es útil si está combinando muchos conjuntos de datos en uno. El conjunto de datos final se puede guardar después de que se complete este comando.</p>
+
+  <p><span class="runinhead">Manejo de errores.</span> Si se produce un error, puede elegir si continuar el proceso con el siguiente archivo de datos o detener el proceso de más archivos. Si es posible, los datos de salida y los archivos del visor se seguirán grabando para el archivo de datos que ha provocado el error aunque se haya especificado la detención.</p>
+
+  <p><span class="runinhead">Nombre raíz para macros e identificadores de archivo.</span> De forma predeterminada, los identificadores de archivo y las macros definidos tienen el prefijo JOB y !JOB, respectivamente seguido por un subrayado. Puede especificar un prefijo diferente en lugar de JOB.
+  El prefijo tendrá añadido ! para las macros.<i>!</i>.</p>
+
+  <h2>Definiciones de macro</h2>
+
+  <p>Utilice el recuadro de subdiálogo para definir sus propias macros que se pueden utilizar en el archivo de sintaxis. Puede definir hasta cinco macros llamadas de !PARM1 a !PARM5 cuyos valores serán nombres habituales de sintaxis o variable y hasta cinco macros llamadas de !QPARM1 a !QPARM5 cuyos valores serán cadenas literales entre comillas. La cadena entre comillas es útil para los títulos o las expresiones de cadena en las transformaciones.</p>
+
+  <p><span class="runinhead">Macros donde los valores están sin comillas.</span> Entre cualquier texto de macro que represente la sintaxis SPSS que debe aparecer si comillas.</p>
+
+  <p><span class="runinhead">Macros donde un valor es un literal entre comillas.</span> Entre cualquier texto de macro que represente la sintaxis SPSS que debe aparecer entre comillas como un título, una etiqueta o un nombre de archivo.</p>
+
+  <p class="bullet">• Utilice comillas simples (') si necesita especificar entre comillas los literales en la definición. El texto de macro generado se especificará entre comillas dobles (").</p>
+
+  <h3>Un ejemplo de macro para buscar archivos de datos para un ID de caso particular</h3>Suponga que un conjunto de archivos tienen una variable de ID llamada PatientID, y desea encontrar todas las apariciones del ID   "Johann Schmidt". Puede utilizar el fragmento siguiente en el archivo de sintaxis.<code><br>
+  SELECT IF !PARM1 EQ !QPARM1.<br>
+  FREQUENCIES !PARM1.</code><br>
+  donde especifica PatientID en el campo PARM1 y Johann Schmidt en el campo QPARM1.
+
+  <p class="bullet">• Defina el parámetro de descriptor de errores para Continuar con el siguiente archivo puesto que no hay casos seleccionados, el comando FREQUENCIES generará un error. (OMS se puede utilizar para suprimir la tabla de advertencias resultante.)</p>
+
+  <p class="bullet">• Grabe la salida del visor en un único archivo para que sea más fácil ver el resultado.</p>
+
+  <h2>Una utilidad de búsqueda de datos.</h2>Consulte Editar&gt;Buscar archivos de datos para un ver un diálogo que utiliza este comando para buscar los casos en un conjunto de archivos SAV.
+
+  <h2>Características adicionales</h2>Ejecute el comando<br>
+  SPSSINC PROCESS FILES /HELP.<br>
+  para mostrar toda la descripción de la sintaxis. Mediante el uso de la sintaxis, el resultado se puede grabar en el directorio de trabajo actual del procesador SPSS. El comando SHOW DIRECTORY muestra el nombre de dicho directorio.
+
+  <p>Para poder utilizar un archivo para especificar los archivos que se deben procesar, cree un archivo con un nombre por línea, incluyendo la ruta del archivo. El nombre debe estar entre comillas dobles (").
+  Todo lo que aparezca detrás de la línea se ignora. Las líneas en blanco y las líneas que empiezan por # se ignoran.</p>
+
+  <h2>Requisitos</h2>Este comando requiere el complemento de programabilidad Python. Puede encontrar el complemento Python en el CD de IBM SPSS Statistics o puede descargarlo desde SPSS   Developer Central (www.spss.com/devcentral).
+  <hr>
+
+  <p style="font-size:80%;">© Copyright IBM Corp. 1989, 2013</p>
+</body>
+</html>

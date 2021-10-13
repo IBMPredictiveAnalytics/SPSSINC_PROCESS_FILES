@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=utf-8">
+
+  <title>Apply a Syntax File to a Set of Data Files</title>
+  <style type="text/css">
+
+  <!-- 
+
+  H1 {font-weight:bold; color:#006699; font-size:125%; }
+  H2 {font-weight:bold; color:#006699; font-size:110%; }
+  TABLE {font-size:100%;}
+
+  /* paragraph tags */
+  .step {text-indent: -1.3em; margin-left:1.3em; margin-top: 0px;}
+  .menuselection {margin-left:10px}
+  .bullet {list-style-type: disc;margin-top:12px; margin-left:36px; text-indent:-1em; }
+  .codeblock {background-color: #ffffe6; display:block; margin-left:5px; padding:5px;}
+
+  /* inline tags */
+  .screen {font-weight:bold; color:#408080}                       /*** used refer to on-screen text ***/
+  .name {font-style: italic}                                                       /*** used to tag names, such as variable names, file names, and so forth ***/
+  .runinhead {font-weight: bold} 
+  .superscript {vertical-align:super; font-size:80%}
+  .subscript {vertical-align:sub; font-size:80%}
+
+
+  --> 
+  </style>
+</head>
+
+<body>
+  <h1>Apply a Syntax File to a Set of Data Files</h1>This procedure
+  provides a way to loop through a collection of data files and
+  apply the same set of syntax to each. The syntax may contain any
+  commands. Macros and file handles are provided to refer to the
+  inputs and the output specifications.
+
+  <p>It may be convenient to use this procedure in combination with
+  SPSSINC SPLIT DATASET, which can break up a dataset according to
+  the values of a splitting variable.</p>
+
+  <p><span class="runinhead">Input Data Files Specified by Wildcard
+  Expression.</span> Choose a directory to process and, optionally,
+  specify a file pattern. For example,<br>
+  c:\mydata\x*.sav<br>
+  would process all the sav files in directory c:\mydata whose
+  names start with the letter x.</p>
+
+  <p class="bullet">• If no file-name expression is given,*.sav is
+  assumed.</p>
+
+  <p class="bullet">• You must choose either this option or the
+  following <span class="screen">Input Data</span> option but not
+  both.</p>
+
+  <p><span class="runinhead">Input Data Files Specified in a
+  File.</span> Process all the files listed in the specified file.
+  The SPSSINC SPLIT DATASET command can produce a file in the
+  correct format.</p>
+
+  <p class="bullet">• You must choose either this option or the
+  preceding <span class="screen">Input Data</span> option but not
+  both.</p>
+
+  <p><span class="runinhead">Syntax File to Execute for Each Data
+  File.</span> The syntax file will be invoked for each input
+  dataset. It should read the file and carry out any desired
+  operations. File handles and macros are defined to refer to the
+  input file and various output locations. The file handles are as
+  follows.</p>
+
+  <ul>
+    <li>JOB_INPUTFILE: The input file.</li>
+
+    <li>JOB_DATADIR: The input data directory</li>
+
+    <li>JOB_OUTPUTDATADIR: The specified output data directory or
+    <i>&lt;NONE&gt;</i></li>
+
+    <li>JOB_VIEWERDIR: The specified Viewer output directory or
+    <i>&lt;NONE&gt;</i></li>
+  </ul>
+
+  <p class="bullet">• For a SAV file you could read the data with
+  the command<br>
+  GET FILE="JOB_INPUTFILE".</p>
+
+  <p class="bullet">• Macros are defined with these same names
+  except starting with "!". Two additional macros are defined.</p>
+
+  <ul>
+    <li>!JOB_DATAFILEROOT: The name of the input data file without
+    its extension</li>
+
+    <li>!JOB_DATAFILEEXT: The extension of the input data file</li>
+  </ul>
+
+  <p>The text <i>!JOB</i> or <i>JOB</i> is replaced by the root
+  name specified in the root-name control.</p>
+
+  <p class="bullet">• Macro text is quoted. Here is an example of
+  code that could be used to export Viewer contents to the
+  specified Viewer directory using the name of the data file with
+  extension .xls.<br></p>
+
+  <p class="code">DEFINE !out ()
+  !QUOTE(!CONCAT(!EVAL(!UNQUOTE(!JOB_VIEWERDIR)), "/",
+  !EVAL(!unquote(!JOB_DATAFILEROOT)), ".xls"))<br>
+  !ENDDEFINE.<br>
+  OUTPUT EXPORT /XLS DOCUMENTFILE =!out.</p>
+
+  <p><span class="runinhead">Directory for Output Data
+  Files.</span> If specified, for each dataset the data file will
+  be written as an .sav file to that directory after the syntax
+  completes. This can be useful when carrying out transformations
+  for a set of files. You can, of course, leave this field blank
+  and write any data file output you choose. The JOB_OUTPUTDATADIR
+  file handle or !JOB_OUTPUTDATADIR macro identifies the data
+  output location specified in this command</p>
+
+  <p><span class="runinhead">Viewer Output.</span> Viewer output
+  can be saved either in a separate file for each data file or as a
+  single file for the entire job. Select the appropriate radio
+  button, and enter either a directory name or a file
+  specification. If you choose to write a single file but enter
+  only a directory in the following control, the file will be named
+  <i>VIEWER.SPV</i>. The Browse button for that control only allows
+  a directory to be specified, but you can type in a file name.</p>
+
+  <p><span class="runinhead">Write Job Log to File.</span> Specify
+  a file for the job log. The log lists the files processed and
+  written by the procedure, each with a time stamp.</p>
+
+  <p class="bullet">• Operations carried out by the syntax file are
+  not recorded.</p>
+
+  <p class="bullet">• If a serious error occurs in processing a
+  file, there will be an error entry in the log.</p>
+
+  <p><span class="runinhead">Syntax to Execute before
+  Processing.</span> You can specify a syntax file that will be
+  executed once before input file processing starts. Macros and
+  file handles will be defined as for the first file in the
+  processing list. If a serious error occurs, processing is
+  stopped.</p>
+
+  <p><span class="runinhead">Syntax to Execute after All
+  Processing.</span> You can specify a syntax file that will be
+  executed once after all the input files are processed. Macros and
+  file handles will be defined as for the last file in the
+  processing list.</p>
+
+  <h2>Options</h2>
+
+  <p><span class="runinhead">Log File Mode.</span> Choose whether
+  the log entries for the job are appended to an existing file or
+  replace the contents.</p>
+
+  <p><span class="runinhead">Data File Processing after Each
+  Step.</span> Choose <span class="screen">Close</span> to have all
+  datasets closed after each iteration of input file processing.
+  Leaving datasets open after each step is useful if you are
+  combining many datasets into one. The final dataset could be
+  saved after this command completes.</p>
+
+  <p><span class="runinhead">Error Handling.</span> If an error
+  occurs, you can choose whether to continue processing with the
+  next data file or to stop processing any further files. If
+  possible, the output data and Viewer files will still be written
+  for the data file that caused the error even if stopping is
+  specified.</p>
+
+  <p><span class="runinhead">Root name for macros and file
+  handles.</span> By default, the file handles and macros defined
+  have the prefix JOB and !JOB, respectively followed by an
+  underscore. You can specify a different prefix in place of JOB.
+  The prefix will have ! prepended to it for macros.<i>!</i>.</p>
+
+  <h2>Macro Definitions</h2>
+
+  <p>Use this subdialog box to define your own macros that can be
+  used in the syntax file. You can define up to five macros named
+  !PARM1 to !PARM5 whose values will be ordinary syntax or variable
+  names, and up to five macros named !QPARM1 to !QPARM5 whose
+  values will be quoted literal strings. The quoted string are
+  useful for titles or string expressions in transformations.</p>
+
+  <p><span class="runinhead">Macros Where Values Are
+  Unquoted.</span> Enter any macro text that represents any SPSS
+  syntax that should appear without quotation marks.</p>
+
+  <p><span class="runinhead">Macros Where Value Is a Quoted
+  Literal.</span> Enter any macro text that represents SPSS syntax
+  that should appear in quotation marks such as a title, label, or
+  file name.</p>
+
+  <p class="bullet">• Use single quotes (') if you need to quote
+  literals in the definition. The generated macro text will be
+  enclosed in double quotes(").</p>
+
+  <h3>A Macro Example to Search Data Files for a Particular Case
+  ID</h3>Suppose some set of files have an ID variable named
+  PatientID, and you would like to find all occurrences of the id
+  "Johann Schmidt". You could use the following fragment in your
+  syntax file. <code><br>
+  SELECT IF !PARM1 EQ !QPARM1.<br>
+  FREQUENCIES !PARM1.</code><br>
+  where you enter PatientID in the PARM1 field and Johann Schmidt
+  in the QPARM1 field.
+
+  <p class="bullet">• Set the Error Handling parameter to Continue
+  with next file since if no cases are selected, the FREQUENCIES
+  command will generate an error. (OMS could be used to suppress
+  the resulting Warnings table.)</p>
+
+  <p class="bullet">• Write the Viewer output to a single file for
+  ease of viewing the result.</p>
+
+  <h2>A Data Searching Utility</h2>See Edit&gt;Search Data Files
+  for a dialog that uses this command to search the cases in a set
+  of SAV files.
+
+  <h2>Additional Features</h2>Run the command<br>
+  SPSSINC PROCESS FILES /HELP.<br>
+  to display the entire syntax description. Using syntax, the ouput
+  can be written to the current working directory of the SPSS
+  Processor. The command SHOW DIRECTORY displays the name of that
+  directory.
+
+  <p>In order to use a file to specify the files that should be
+  processed, create a file with one name per line including the
+  path to the file. The name must be enclosed in double quotes (").
+  Anything following on the line is ignored. Blank lines and lines
+  starting with # are ignored.</p>
+
+  <h2>Requirements</h2>This command requires the Python
+  Programmability Plug-in, You can find the Python plug-in on the
+  IBM SPSS Statistics CD, or you can download it from SPSS
+  Developer Central (www.spss.com/devcentral).
+  <hr>
+
+  <p style="font-size:80%;">© Copyright IBM Corp. 1989, 2013</p>
+</body>
+</html>

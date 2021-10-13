@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content=
+
+"text/html; charset=utf-8">
+
+  <title>データ ファイルのセットへのシンタックス ファイルの適用</title>
+  <style type="text/css">
+
+  <!-- 
+
+  H1 {font-weight:bold; color:#006699; font-size:125%; }
+  H2 {font-weight:bold; color:#006699; font-size:110%; }
+  TABLE {font-size:100%;}
+
+  /* paragraph tags */
+  .step {text-indent: -1.3em; margin-left:1.3em; margin-top: 0px;}
+  .menuselection {margin-left:10px}
+  .bullet {list-style-type: disc;margin-top:12px; margin-left:36px; text-indent:-1em; }
+  .codeblock {background-color: #ffffe6; display:block; margin-left:5px; padding:5px;}
+
+  /* inline tags */
+  .screen {font-weight:bold; color:#408080}                       /*** used refer to on-screen text ***/
+  .name {font-style: italic}                                                       /*** used to tag names, such as variable names, file names, and so forth ***/
+  .runinhead {font-weight: bold} 
+  .superscript {vertical-align:super; font-size:80%}
+  .subscript {vertical-align:sub; font-size:80%}
+
+
+  --> 
+  </style>
+</head>
+
+<body>
+  <h1>データ ファイルのセットへのシンタックス ファイルの適用</h1>このプロシージャは、データ ファイルのコレクションをループ処理し、各データ ファイルに同じシンタックスのセットを適用するための方法を提供します。シンタックスは任意のコマンドを含むことができます。入力および出力の指定を参照するために、マクロとファイル ハンドルが提供されています。
+
+  <p>SPSSINC SPLIT DATASET は分割変数の値に従ってデータセットを分割できるため、このプロシージャと組み合わせて使用すると便利です。</p>
+
+  <p><span class="runinhead">ワイルドカード式によって指定された入力データ ファイル:</span> 処理するディレクトリを選択し、オプションとしてファイル パターンを指定します。たとえば、<br>
+  c:\mydata\x*.sav<br>
+このパターンは、ディレクトリ c:\mydata 内の sav ファイルのうち、名前の先頭の文字が x であるファイルをすべて処理します。</p>
+
+  <p class="bullet">ファイル名の式が指定されなかった場合は、*.sav が仮定されます。</p>
+
+  <p class="bullet">このオプションまたは下記の<span class="screen">「入力データ」</span>オプションのいずれかを選択する必要がありますが、両方は選択できません。</p>
+
+  <p><span class="runinhead">ファイル内で指定された入力データ ファイル:</span> 指定されたファイル内にリストされたすべてのファイルを処理します。SPSSINC SPLIT DATASET コマンドは、正しい形式のファイルを生成できます。</p>
+
+  <p class="bullet">このオプションまたは上記の<span class="screen">「入力データ」</span>オプションのいずれかを選択する必要がありますが、両方は選択できません。</p>
+
+  <p><span class="runinhead">各データ ファイルで実行するシンタックス ファイル:</span> シンタックス ファイルは、各入力データセットに対して呼び出されます。ファイルが読み取られ、すべての必要な操作が実行されます。入力ファイルおよびさまざまな出力の場所を参照するために、ファイル ハンドルとマクロが定義されています。ファイル ハンドルを以下に示します。</p>
+
+  <ul>
+    <li>JOB_INPUTFILE: 入力ファイル</li>
+
+    <li>JOB_DATADIR: 入力データ ディレクトリ</li>
+
+    <li>JOB_OUTPUTDATADIR: 指定された出力データ ディレクトリまたは <i>&lt;NONE&gt;</i></li>
+
+    <li>JOB_VIEWERDIR: 指定されたビューア出力ディレクトリまたは <i>&lt;NONE&gt;</i></li>
+  </ul>
+
+  <p class="bullet">SAV ファイルでは、以下のコマンドを使用してデータを読み取ることができます。<br>
+  GET FILE="JOB_INPUTFILE".</p>
+
+  <p class="bullet">上記のファイル ハンドル名の先頭に「!」を付加した名前を持つマクロが定義されています。それ以外に 2 つのマクロが定義されています。</p>
+
+  <ul>
+    <li>!JOB_DATAFILEROOT: 拡張子なしの入力データ ファイルの名前</li>
+
+    <li>!JOB_DATAFILEEXT: 入力データ ファイルの拡張子</li>
+  </ul>
+
+  <p>テキスト <i>!JOB</i> または <i>JOB</i> は、ルート名コントロール内で指定されたルート名によって置き換えられます。</p>
+
+  <p class="bullet">マクロ テキストは引用符で囲まれます。データ ファイルの名前と拡張子 .xls を使用して、指定されたビューア ディレクトリにビューア内容をエクスポートするために使用できるコードの例を、以下に示します。<br></p>
+
+  <p class="code">DEFINE !out ()
+  !QUOTE(!CONCAT(!EVAL(!UNQUOTE(!JOB_VIEWERDIR)), "/",
+  !EVAL(!unquote(!JOB_DATAFILEROOT)), ".xls"))<br>
+  !ENDDEFINE.<br>
+  OUTPUT EXPORT /XLS DOCUMENTFILE =!out.</p>
+
+  <p><span class="runinhead">出力データ ファイルのディレクトリ:</span> これが指定された場合、シンタックスが完了した後で、各データセットのデータ ファイルがこのディレクトリに .sav ファイルとして書き込まれます。これは、ファイルのセットの変換を実行する場合に役立つことがあります。このフィールドを空白のままにして、任意の出力場所にデータ ファイルを書き込むこともできます。JOB_OUTPUTDATADIR ファイル ハンドルまたは !JOB_OUTPUTDATADIR マクロは、このコマンド内で指定されたデータ出力場所を識別します。</p>
+
+  <p><span class="runinhead">ビューア出力:</span> ビューア出力をデータ ファイルごとに別個のファイルに保存するか、ジョブ全体で単一のファイルとして保存するかを選択できます。該当するラジオ ボタンを選択し、ディレクトリ名またはファイル指定を入力します。単一のファイルの書き込みを選択したが、後続のコントロールにディレクトリのみを入力した場合、ファイル名は <i>VIEWER.SPV</i> になります。そのコントロールの「参照」ボタンで指定できるのはディレクトリのみですが、ファイル名を直接入力できます。</p>
+
+  <p><span class="runinhead">ジョブ ログをファイルに書き込む:</span> ジョブ ログのファイルを指定します。ログには、プロシージャによって処理されて書き込まれたファイルがリストされ、それぞれにタイム スタンプが付きます。</p>
+
+  <p class="bullet">シンタックス ファイルによって実行された操作は記録されません。</p>
+
+  <p class="bullet">ファイルの処理中に重大なエラーが発生した場合は、ログにエラー エントリーが記録されます。</p>
+
+  <p><span class="runinhead">処理前に実行するシンタックス:</span> 入力ファイルの処理を開始する前に 1 回実行されるシンタックス ファイルを指定できます。処理リスト内の最初のファイルに関して、マクロとファイル ハンドルが定義されます。重大なエラーが発生した場合、処理は停止します。</p>
+
+  <p><span class="runinhead">すべての処理後に実行するシンタックス:</span> すべての入力ファイルが処理された後に 1 回実行されるシンタックス ファイルを指定できます。処理リスト内の最後のファイルに関して、マクロとファイル ハンドルが定義されます。</p>
+
+  <h2>オプション</h2>
+
+  <p><span class="runinhead">ログ ファイル モード:</span> ジョブのログ エントリーを既存のファイルに追加するか、内容を置き換えるかを選択します。</p>
+
+  <p><span class="runinhead">各ステップ後にデータ ファイルを処理:</span> 入力ファイル処理の各反復の後にすべてのデータセットを閉じるには、<span class="screen">「閉じる」</span>を選択します。多くのデータセットを 1 つに結合する場合は、各ステップ後にデータセットを開いたままにすると便利です。このコマンドの完了後に最終データセットを保存できます。</p>
+
+  <p><span class="runinhead">エラー処理:</span> エラーが発生した場合に、次のデータ ファイルで処理を続行するか、それ以降のファイルの処理を停止するかを選択できます。停止が指定された場合でも、可能であれば、エラーの原因となったデータ ファイルの出力データおよびビューア ファイルが書き込まれます。</p>
+
+  <p><span class="runinhead">マクロとファイル ハンドルのルート名:</span> デフォルトでは、ファイル ハンドルとマクロはそれぞれ接頭辞 JOB および !JOB を付けて定義され、後にはアンダースコアーが付きます。JOB の代わりに別の接頭辞を指定できます。マクロの場合は <i>!</i> が接頭辞の前に付加されます。</p>
+
+  <h2>マクロ定義</h2>
+
+  <p>このサブダイアログ ボックスを使用して、シンタックス ファイル内で使用できる独自のマクロを定義します。通常のシンタックス名または変数名を値として受け入れるマクロを最大で 5 個定義できます (名前は !PARM1 から !PARM5 まで)。また、引用符付きリテラル文字列を値として受け入れるマクロを最大で 5 個定義できます (名前は !QPARM1 から !QPARM5 まで)。引用符付き文字列は、タイトルまたは変換内の文字列式に役立ちます。</p>
+
+  <p><span class="runinhead">値に引用符が付かないマクロ:</span> 引用符なしで表示する必要がある SPSS シンタックスを表すマクロ テキストを入力します。</p>
+
+  <p><span class="runinhead">値が引用符付きリテラルであるマクロ:</span> タイトル、ラベル、ファイル名など、引用符付きで表示する必要がある SPSS シンタックスを表すマクロ テキストを入力します。</p>
+
+  <p class="bullet">定義内でリテラルを引用符で囲む必要がある場合は、単一引用符 (') を使用します。生成されたマクロ テキストは、二重引用符 (") で囲まれます。</p>
+
+  <h3>データ ファイルで特定のケース ID を検索するマクロ例</h3>PatientID という名前の ID 変数を含むファイルのセットがあり、「Johann Schmidt」という ID が出現するすべての場所を検索するとします。シンタックス ファイル内で以下のフラグメントを使用できます。<code><br>
+  SELECT IF !PARM1 EQ !QPARM1.<br>
+  FREQUENCIES !PARM1.</code><br>
+ここで、PARM1 フィールドには PatientID を、QPARM1 フィールドには Johann Schmidt を入力します。
+
+  <p class="bullet">ケースが選択されなかった場合には FREQUENCIES コマンドがエラーを生成するため、次のファイルで処理を続行するように「エラー処理」パラメータを設定します。(OMS を使用して、生成される警告テーブルを抑制できます。)</p>
+
+  <p class="bullet">結果の表示を容易にするために、ビューア出力を単一のファイルに書き込みます。</p>
+
+  <h2>データ検索ユーティリティー</h2>このコマンドを使用して SAV ファイルのセット内のケースを検索するダイアログについては、「編集」&gt;「データ ファイルの検索」を参照してください。
+
+  <h2>その他の機能</h2>次のコマンドを実行します。<br>
+  SPSSINC PROCESS FILES /HELP.<br>
+シンタックス全体の説明が表示されます。シンタックスを使用して、出力を SPSS プロセッサーの現行作業ディレクトリに書き込むことができます。コマンド SHOW DIRECTORY は、そのディレクトリの名前を表示します。
+
+  <p>ファイルを使用して処理対象のファイルを指定するには、新しいファイルを作成し、処理対象のファイルへのパスを含むファイル名を各行に 1 つずつ指定します。名前は、二重引用符 (") で囲む必要があります。各行でファイル名の後に指定された内容は無視されます。空白行および # で始まる行は無視されます。</p>
+
+  <h2>要件</h2>このコマンドには、Python Programmability プラグインが必要です。Python プラグインは、IBM SPSS Statistics CD 上にあります。または、SPSS Developer Central (www.spss.com/devcentral) からダウンロードできます。
+  <hr>
+
+  <p style="font-size:80%;">© Copyright IBM Corp. 1989, 2013</p>
+</body>
+</html>

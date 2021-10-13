@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=utf-8">
+
+  <title>Syntaxdatei auf ein Set Datendateien anwenden</title>
+  <style type="text/css">
+
+  <!-- 
+
+  H1 {font-weight:bold; color:#006699; font-size:125%; }
+  H2 {font-weight:bold; color:#006699; font-size:110%; }
+  TABLE {font-size:100%;}
+
+  /* paragraph tags */
+  .step {text-indent: -1.3em; margin-left:1.3em; margin-top: 0px;}
+  .menuselection {margin-left:10px}
+  .bullet {list-style-type: disc;margin-top:12px; margin-left:36px; text-indent:-1em; }
+  .codeblock {background-color: #ffffe6; display:block; margin-left:5px; padding:5px;}
+
+  /* inline tags */
+  .screen {font-weight:bold; color:#408080}                       /*** used refer to on-screen text ***/
+  .name {font-style: italic}                                                       /*** used to tag names, such as variable names, file names, and so forth ***/
+  .runinhead {font-weight: bold} 
+  .superscript {vertical-align:super; font-size:80%}
+  .subscript {vertical-align:sub; font-size:80%}
+
+
+  --> 
+  </style>
+</head>
+
+<body>
+  <h1>Syntaxdatei auf ein Set Datendateien anwenden</h1>Diese Prozedur bietet eine Möglichkeit, eine Sammlung von Datendateien in einer Schleife zu durchlaufen und auf jede Datendatei dieselbe Syntax anzuwenden. Die Syntax kann beliebige Befehle enthalten. Makros und Dateikennungen werden zum Verweis auf die Eingaben und die Ausgabespezifikationen bereitgestellt.
+
+  <p>Es kann praktisch sein, diese Prozedur in Verbindung mit SPSSINC SPLIT DATASET zu verwenden, wodurch ein Dataset entsprechend der Werte einer Teilungsvariablen aufgeteilt werden kann.</p>
+
+  <p><span class="runinhead">Durch Platzhalterausdruck angegebene Datendateien.</span> Wählen Sie ein Verzeichnis für die Verarbeitung aus und geben Sie optional ein Dateimuster an. Beispiel:<br>
+  c:\mydata\x*.sav<br>
+  verarbeitet alle SAV-Dateien im Verzeichnis c:\mydata, deren Namen mit dem Buchstaben x beginnen.</p>
+
+  <p class="bullet">•&nbsp;Wird kein Ausdruck für einen Dateinamen angegeben, wird *.sav angenommen.</p>
+
+  <p class="bullet">•&nbsp;Sie müssen diese Option oder die folgende Eingabedatenoption auswählen.<span class="screen"></span> Die Optionen können jedoch nicht kombiniert werden.</p>
+
+  <p><span class="runinhead">In einer Datei angegebene Eingabedatendateien.</span> Alle in der angegebenen Datei aufgelisteten Dateien werden verarbeitet.
+  Der Befehl SPSSINC SPLIT DATASET kann eine Datei im korrekten Format erzeugen.</p>
+
+  <p class="bullet">•&nbsp;Sie müssen diese Option oder die vorhergehende Eingabedatenoption auswählen.<span class="screen"></span> Die Optionen können jedoch nicht kombiniert werden.</p>
+
+  <p><span class="runinhead">Für jede Datendatei auszuführende Syntaxdatei.</span> Die Syntaxdatei wird für jedes Eingabedataset aufgerufen. Sie sollte die Datei lesen und die gewünschten Operationen ausführen. Dateikennungen und Makros werden definiert, um auf die Eingabedatei und die verschiedenen Ausgabespeicherpositionen zu verweisen. Es gibt folgende Dateikennungen:</p>
+
+  <ul>
+    <li>JOB_INPUTFILE: Die Eingabedatei.</li>
+
+    <li>JOB_DATADIR: Das Eingabedatenverzeichnis.</li>
+
+    <li>JOB_OUTPUTDATADIR: Das angegebene Ausgabedatenverzeichnis oder <i>&lt;NONE&gt;</i>.</li>
+
+    <li>JOB_VIEWERDIR: Das angegebene Viewer-Ausgabeverzeichnis oder <i>&lt;NONE&gt;</i>.</li>
+  </ul>
+
+  <p class="bullet">•&nbsp;Bei einer SAV-Datei könnten Sie die Daten mit dem folgenden Befehl lesen:<br>
+  GET FILE="JOB_INPUTFILE".</p>
+
+  <p class="bullet">•&nbsp;Makros werden mit denselben Namen definiert. Sie beginnen jedoch mit "!". Außerdem sind zwei zusätzliche Makros definiert.</p>
+
+  <ul>
+    <li>!JOB_DATAFILEROOT: Der Name der Eingabedatendatei ohne ihre Erweiterung.</li>
+
+    <li>!JOB_DATAFILEEXT: Die Erweiterung der Eingabedatendatei.</li>
+  </ul>
+
+  <p><i>!JOB</i> oder <i>JOB</i> wird durch den im Steuerelement für den Stammnamen definierten Stammnamen ersetzt.</p>
+
+  <p class="bullet">•&nbsp;Makrotext steht in Anführungszeichen. Im Folgenden ist ein Codebeispiel aufgeführt, das verwendet werden könnte, um Viewer-Inhalte in das angegebene Viewerverzeichnis mit dem Namen der Datendatei und der Erweiterung'.xls' zu exportieren.<br></p>
+
+  <p class="code">DEFINE !out ()
+  !QUOTE(!CONCAT(!EVAL(!UNQUOTE(!JOB_VIEWERDIR)), "/",
+  !EVAL(!unquote(!JOB_DATAFILEROOT)), ".xls"))<br>
+  !ENDDEFINE.<br>
+  OUTPUT EXPORT /XLS DOCUMENTFILE =!out.</p>
+
+  <p><span class="runinhead">Verzeichnis für Ausgabedatendateien.</span> Wenn dieses angegeben wird, wird für jedes Dataset die Datendatei als SAV-Datei in dieses Verzeichnis geschrieben, nachdem die Syntax vollständig abgearbeitet wurde. Dies kann nützlich sein, wenn Transformationen für eine Gruppe von Dateien durchzuführen sind. Sie können dieses Feld auch leer lassen und eine beliebige Datendateiausgabe schreiben. Die Dateikennung JOB_OUTPUTDATADIR oder das Makro !JOB_OUTPUTDATADIR geben die in diesem Befehl angegebene Datenausgabeposition an.</p>
+
+  <p><span class="runinhead">Viewer-Ausgabe.</span> Die Viewer-Ausgabe kann entweder für jede Datendatei in einer eigenen Datei oder für den gesamten Job in einer einzigen Datei gespeichert werden. Wählen Sie das entsprechende Optionsfeld aus und geben Sie entweder einen Verzeichnisnamen oder eine Dateispezifikation ein. Wenn Sie eine einzige Datei schreiben lassen und im folgenden Steuerelement nur ein Verzeichnis angeben, lautet der Dateiname <i>VIEWER.SPV</i>. Die Schaltfläche <b>Durchsuchen</b> für dieses Steuerelement erlaubt nur die Angabe eines Verzeichnisses. Sie können jedoch einen Dateinamen eingeben.</p>
+
+  <p><span class="runinhead">Jobprotokoll in Datei schreiben.</span> Geben Sie eine Datei für das Jobprotokoll an. Das Protokoll listet die Dateien auf, die von der Prozedur verarbeitet und geschrieben wurden, und gibt eine Zeitmarke dazu an.</p>
+
+  <p class="bullet">•&nbsp;Von der Syntaxdatei durchgeführte Operationen werden nicht aufgezeichnet.</p>
+
+  <p class="bullet">•&nbsp;Wenn bei der Verarbeitung einer Datei ein schwerwiegender Fehler auftritt, enthält das Protokoll einen Fehlereintrag.</p>
+
+  <p><span class="runinhead">Vor der Verarbeitung auszuführende Syntax.</span> Sie können eine Syntaxdatei angeben, die einmal vor Beginn der Verarbeitung der Eingabedatei ausgeführt wird. Makros und Dateikennungen werden wie für die erste Datei in der Verarbeitungsliste definiert. Wenn ein schwerwiegender Fehler auftritt, wird die Verarbeitung gestoppt.</p>
+
+  <p><span class="runinhead">Nach der Komplettverarbeitung auszuführende Syntax.</span> Sie können eine Syntaxdatei angeben, die einmal ausgeführt wird, nachdem alle Eingabedateien verarbeitet wurden. Makros und Dateikennungen werden wie für die letzte Datei in der Verarbeitungsliste definiert.</p>
+
+  <h2>Optionen</h2>
+
+  <p><span class="runinhead">Protokolldateimodus.</span> Wählen Sie aus, ob die Protokolleinträge für den Job an eine vorhandene Datei angehängt werden sollen oder ob die Inhalte ersetzt werden sollen.</p>
+
+  <p><span class="runinhead">Datendateiverarbeitung nach jedem Schritt.</span> Wählen Sie <span class="screen">Schließen</span> aus, um alle Datasets nach jeder Iteration der Eingabedateiverarbeitung schließen zu lassen.
+  Wenn Sie viele Datasets kombinieren, ist es hilfreich, Datasets nach jedem Schritt offen zu lassen. Das letzte Dataset könnte nach Abschluss dieses Befehls gespeichert werden.</p>
+
+  <p><span class="runinhead">Fehlerbehandlung.</span> Wenn ein Fehler auftritt, können Sie wählen, ob mit der Verarbeitung der nächsten Datendatei fortgefahren werden soll oder ob die Verarbeitung weiterer Dateien gestoppt werden soll. Wenn möglich, werden die Ausgabedaten und die Viewer-Dateien noch für die fehlerverursachende Datendatei geschrieben, selbst wenn festgelegt wurde, dass die Verarbeitung gestoppt werden soll.</p>
+
+  <p><span class="runinhead">Stammname für Makros und Dateikennungen.</span> Standardmäßig haben die definierten Dateikennungen und Makros das Präfix JOB bzw. !JOB gefolgt von einem Unterstrich. Sie können anstelle von JOB ein anderes Präfix angeben.
+  Dem Präfix wird bei Makros ! vorangestellt.</p>
+
+  <h2>Makrodefinitionen</h2>
+
+  <p>Mit diesem Unterdialogfeld können Sie eigene Makros definieren, die in der Syntaxdatei verwendet werden können. Sie können bis zu fünf Makros (!PARM1 bis !PARM5) definieren, deren Werte normale Syntax oder Variablennamen sind, sowie bis zu fünf Makros (!QPARM1 bis !QPARM5), deren Werte Literalzeichenfolgen in Anführungszeichen sind. Die Zeichenfolgen in Anführungszeichen sind nützlich für Titel oder Zeichenfolgeausdrücke in Transformationen.</p>
+
+  <p><span class="runinhead">Makros mit Werten ohne Anführungszeichen.</span> Geben Sie beliebigen Makrotext ein, der SPSS-Syntax darstellt, die ohne Anführungszeichen stehen soll.</p>
+
+  <p><span class="runinhead">Makros, deren Wert ein Literal in Anführungszeichen ist.</span> Geben Sie beliebigen Makrotext ein, der SPSS-Syntax darstellt, die in Anführungszeichen stehen soll, z.&nbsp;B. einen Titel, eine Beschriftung oder ein Dateiname.</p>
+
+  <p class="bullet">•&nbsp;Verwenden Sie einfache Anführungszeichen ('), wenn Sie in der Definition Literale zitieren müssen. Der generierte Makrotext wird in doppelte Anführungszeichen (") eingeschlossen.</p>
+
+  <h3>Makrobeispiel für die Suche von Datendateien für eine bestimme Fall-ID</h3>Wenn einige Dateien eine ID-Variable namens 'PatientID' haben und Sie alle Vorkommen der ID "Johann Schmidt" finden wollen, könnten Sie das folgende Fragment in Ihrer Syntaxdatei verwenden. <code><br>
+  SELECT IF !PARM1 EQ !QPARM1.<br>
+  FREQUENCIES !PARM1.</code><br>
+  Dabei geben Sie 'PatientID' in das Feld 'PARM1' und 'Johann Schmidt' in das Feld 'QPARM1' ein.
+
+  <p class="bullet">•&nbsp;Setzen Sie den Parameter 'Fehlerbehandlung' so, dass mit der nächsten Datei fortgefahren wird, da der Befehl FREQUENCIES einen Fehler generiert, wenn keine Fälle ausgewählt sind. (Zur Unterdrückung der resultierenden Warnungstabelle könnte OMS verwendet werden.)</p>
+
+  <p class="bullet">•&nbsp;Schreiben Sie die Viewer-Ausgabe zur übersichtlicheren Ergebnisdarstellung in eine einzige Datei.</p>
+
+  <h2>Dienstprogramm zum Suchen nach Daten</h2>Ein Dialogfeld, das diesen Befehl verwendet, um die Fälle in einer Gruppe von SAV-Dateien zu suchen, finden Sie unter <b>Bearbeiten&gt;Datendateien durchsuchen</b>.
+
+  <h2>Weitere Funktionen</h2>Führen Sie den folgenden Befehl aus:<br>
+  SPSSINC PROCESS FILES /HELP.<br>
+  Sie zeigen damit die vollständige Syntaxbeschreibung an. Mithilfe der entsprechenden Syntax kann die Ausgabe in das aktuelle Arbeitsverzeichnis des SPSS-Prozessors geschrieben werden. Der Befehl SHOW DIRECTORY zeigt den Namen dieses Verzeichnisses an.
+
+  <p>Wenn die zu verarbeitenden Dateien in einer Datei angegeben werden sollen, erstellen Sie eine Datei, die pro Zeile den Namen und den Pfad zu einer Datei enthält. Der Name muss in Anführungszeichen (") eingeschlossen sein.
+  Der darauf folgende Text in der Zeile wird ignoriert. Leere Zeilen und mit # beginnende Zeilen werden ignoriert.</p>
+
+  <h2>Anforderungen</h2>Dieser Befehl erfordert das Python-Programmierungs-Plug-in. Sie finden das Python-Plug-in auf der IBM SPSS Statistics-CD oder Sie können es über SPSS Developer Central (www.spss.com/devcentral) herunterladen.
+  <hr>
+
+  <p style="font-size:80%;">© Copyright IBM Corp. 1989, 2013</p>
+</body>
+</html>
