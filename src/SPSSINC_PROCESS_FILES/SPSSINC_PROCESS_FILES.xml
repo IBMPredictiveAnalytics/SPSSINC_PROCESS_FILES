@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Extension xmlns="http://spss.com/clementine/extensions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" debug="false" version="1.0" xsi:schemaLocation="http://spss.com/clementine/extensions http://xml.spss.com/clementine/extensions/CLEFSpecificationFile.xsd">
+	<ExtensionDetails copyright="Licensed Materials - Property of IBM.  IBM SPSS Products: Statistics Common (C) Copyright IBM Corp. 1989, 2013.  US Government Users Restricted Rights - Use, duplication or  disclosure restricted by GSA ADP Schedule Contract with IBM Corp." description="" id="SPSSINC_PROCESS_FILES" label="" provider="SPSS, Inc." providerTag="spss" version="1.0"/>
+	<Resources>
+		<Bundle id="bundle1" path="SPSSINC_PROCESS_FILES" type="properties"/>
+	</Resources>
+	<CommonObjects>
+		<Actions>
+			<Action id="SPSSINC_PROCESS_FILES_action" imagePath="IBMdialogicon.png" label="Process Data Files" labelKey="SPSSINC_PROCESS_FILES_action.LABEL"/>
+		</Actions>
+	</CommonObjects>
+	<UserInterface>
+		<Controls>
+			<MenuItem action="SPSSINC_PROCESS_FILES_action" offset="15" showIcon="true" spssMenu="Utilities"/>
+		</Controls>
+	</UserInterface>
+	<Node id="SPSSINC_PROCESS_FILES" label="Process Files" labelKey="SPSSINC_PROCESS_FILES.LABEL" type="modelBuilder">
+		<Properties>
+			<Property name="SPSSINC_PROCESS_FILES" syntax="SPSSINC PROCESS FILES %%INPUTDATA%%  %%FILELIST%%&#10;%%syntax%% %%outputdatadir%% %%continueonerror%%&#10;%%vieweroutput%% %%viewerdestination%% %%closedata%%&#10;%%logfile%% %%MACRONAME%% %%logfilemode%%&#10;%%beforesyntax%% %%aftersyntax%%&#10;/MACRODEFS ITEMS %%macrodefinitions%%"/>
+			<Property description="false" name="SPSSINC_PROCESS_FILES_modal"/>
+			<Property defaultValue="" description="This file will be invoked for each data file.  Macros and file handles are defined for the inputs and outputs." descriptionKey="syntax_tooltip.LABEL" isRequired="true" label="Syntax File to Execute for Each Data File:" labelKey="syntax.LABEL" name="syntax" syntax="SYNTAX=%%ThisValue%%" syntax_filter="All File Types (*.*)|*.*|A^Syntax|*.sps|O^" valueType="string"/>
+			<Property defaultValue="" description="Optionally specify a directory to write data files to afer syntax is executed" descriptionKey="outputdatadir_tooltip.LABEL" label="Directory for Output Data Files:" labelKey="outputdatadir.LABEL" name="outputdatadir" outputdatadir_filter="All File Types (*.*)|*.*|A^" syntax="OUTPUTDATADIR=%%ThisValue%%" valueType="string"/>
+			<Property defaultValue="viewerdir" description="" descriptionKey="vieweroutput_tooltip.LABEL" label="Viewer Output" labelKey="vieweroutput.LABEL" name="vieweroutput" syntax="%%ThisValue%%" valueType="enum">
+				<Enumeration>
+					<Enum description="One spv file is written for each data file processed" descriptionKey="viewerdir_tooltip.LABEL" hasSubGroup="false" label="Write Viewer contents for each data file to directory" labelKey="viewerdir.LABEL" mnemonic="W" mnemonicKey="viewerdir_mnemonic.VALUE" syntax="VIEWERDIR=" value="viewerdir"/>
+					<Enum description="A single spv file is written for all data files processed" descriptionKey="viewerfile_tooltip.LABEL" hasSubGroup="false" label="Write Viewer contents for entire job to file" labelKey="viewerfile.LABEL" mnemonic="V" mnemonicKey="viewerfile_mnemonic.VALUE" syntax="VIEWERFILE=" value="viewerfile"/>
+				</Enumeration>
+			</Property>
+			<Property defaultValue="" description="Select a directory.  For a single file, VIEWER.SPV will be written to that location" descriptionKey="viewerdestination_tooltip.LABEL" isRequired="true" label="Directory or File for Viewer Output:" labelKey="viewerdestination.LABEL" name="viewerdestination" syntax="%%ThisValue%%" valueType="string" viewerdestination_filter="All File Types (*.*)|*.*|A^"/>
+			<Property defaultValue="" description="" descriptionKey="logfile_tooltip.LABEL" label="Write Job Log to File:" labelKey="logfile.LABEL" logfile_filter="All File Types (*.*)|*.*|A^" name="logfile" syntax="LOGFILE=%%ThisValue%%" valueType="string"/>
+			<Property description="" descriptionKey="INPUTDATA_tooltip.LABEL" label="Input Data Files Specified by Wildcard Expression" labelKey="INPUTDATA.LABEL" name="INPUTDATA" syntax="%%ThisValue%%"/>
+			<Property defaultValue="false" description="" descriptionKey="item_22_tooltip.LABEL" label="Process files matching wildcard" labelKey="item_22.LABEL" name="item_22" syntax="%%ThisValue%%±" valueType="boolean"/>
+			<Property defaultValue="" description="You can select a directory or write a wildcard expression." descriptionKey="inputdataspec_tooltip.LABEL" inputdataspec_filter="All File Types (*.*)|*.*|A^" isRequired="true" label="File Wildcard Expression:" labelKey="inputdataspec.LABEL" name="inputdataspec" syntax="INPUTDATA=%%ThisValue%%" valueType="string"/>
+			<Property description="" descriptionKey="FILELIST_tooltip.LABEL" label="Input Data Files Specified in a File" labelKey="FILELIST.LABEL" name="FILELIST" syntax="%%ThisValue%%"/>
+			<Property defaultValue="false" description="" descriptionKey="item_25_tooltip.LABEL" label="Process files listed in a file such as one produced by\nSPSSINC SPLIT DATASET" labelKey="item_25.LABEL" name="item_25" syntax="%%ThisValue%%±" valueType="boolean"/>
+			<Property defaultValue="" description="" descriptionKey="filelist_tooltip.LABEL" filelist_filter="All File Types (*.*)|*.*|A^" isRequired="true" label="File Containing List of Data Files" labelKey="filelist.LABEL" name="filelist" syntax="FILELIST=%%ThisValue%%" valueType="string"/>
+			<Property description="" descriptionKey="unquotedmacros_tooltip.LABEL" label="Macros Where Values Are Unquoted" labelKey="unquotedmacros.LABEL" name="unquotedmacros" syntax="%%ThisValue%%"/>
+			<Property defaultValue="" description="" descriptionKey="parm1_tooltip.LABEL" label="PARM1:" labelKey="parm1.LABEL" name="parm1" syntax="PARM1=&quot;%%ThisValue%%&quot;" valueType="string"/>
+			<Property defaultValue="" description="" descriptionKey="parm2_tooltip.LABEL" label="PARM2:" labelKey="parm2.LABEL" name="parm2" syntax="PARM2=&quot;%%ThisValue%%&quot;" valueType="string"/>
+			<Property defaultValue="" description="" descriptionKey="PARM3_tooltip.LABEL" label="PARM3:" labelKey="PARM3.LABEL" name="PARM3" syntax="PARM3=&quot;%%ThisValue%%&quot;" valueType="string"/>
+			<Property defaultValue="" description="" descriptionKey="PARM4_tooltip.LABEL" label="PARM4:" labelKey="PARM4.LABEL" name="PARM4" syntax="PARM4=&quot;%%ThisValue%%&quot;" valueType="string"/>
+			<Property defaultValue="" description="" descriptionKey="PARM5_tooltip.LABEL" label="PARM5:" labelKey="PARM5.LABEL" name="PARM5" syntax="PARM5=&quot;%%ThisValue%%&quot;" valueType="string"/>
+			<Property description="" descriptionKey="quotedmacros_tooltip.LABEL" label="Macros Where Value is a Quoted Literal" labelKey="quotedmacros.LABEL" name="quotedmacros" syntax="%%ThisValue%%"/>
+			<Property defaultValue="" description="" descriptionKey="QPARM1_tooltip.LABEL" label="QPARM1:" labelKey="QPARM1.LABEL" name="QPARM1" syntax="QPARM1=&quot;%%ThisValue%%&quot;" valueType="string"/>
+			<Property defaultValue="" description="" descriptionKey="QPARM2_tooltip.LABEL" label="QPARM2:" labelKey="QPARM2.LABEL" name="QPARM2" syntax="QPARM2=&quot;%%ThisValue%%&quot;" valueType="string"/>
+			<Property defaultValue="" description="" descriptionKey="QPARM3_tooltip.LABEL" label="QPARM3:" labelKey="QPARM3.LABEL" name="QPARM3" syntax="QPARM3=&quot;%%ThisValue%%&quot;" valueType="string"/>
+			<Property defaultValue="" description="" descriptionKey="QPARM4_tooltip.LABEL" label="QPARM4:" labelKey="QPARM4.LABEL" name="QPARM4" syntax="QPARM4=&quot;%%ThisValue%%&quot;" valueType="string"/>
+			<Property defaultValue="" description="" descriptionKey="QPARM5_tooltip.LABEL" label="QPARM5:" labelKey="QPARM5.LABEL" name="QPARM5" syntax="QPARM5=&quot;%%ThisValue%%&quot;" valueType="string"/>
+			<Property beforesyntax_filter="All File Types (*.*)|*.*|A^" defaultValue="" description="" descriptionKey="beforesyntax_tooltip.LABEL" label="Syntax to Execute before Processing:" labelKey="beforesyntax.LABEL" name="beforesyntax" syntax="BEFORESYNTAX=%%ThisValue%%" valueType="string"/>
+			<Property aftersyntax_filter="All File Types (*.*)|*.*|A^" defaultValue="" description="" descriptionKey="aftersyntax_tooltip.LABEL" label="Syntax to Execute after All Processing:" labelKey="aftersyntax.LABEL" name="aftersyntax" syntax="AFTERSYNTAX=%%ThisValue%%" valueType="string"/>
+			<Property defaultValue="append" description="" descriptionKey="logfilemode_tooltip.LABEL" label="Log File Mode" labelKey="logfilemode.LABEL" name="logfilemode" syntax="LOGFILEMODE=%%ThisValue%%" valueType="enum">
+				<Enumeration>
+					<Enum description="" descriptionKey="append_tooltip.LABEL" hasSubGroup="false" label="Append to File" labelKey="append.LABEL" mnemonic="A" mnemonicKey="append_mnemonic.VALUE" syntax="APPEND" value="append"/>
+					<Enum description="" descriptionKey="overwrite_tooltip.LABEL" hasSubGroup="false" label="Overwrite file" labelKey="overwrite.LABEL" mnemonic="O" mnemonicKey="overwrite_mnemonic.VALUE" syntax="OVERWRITE" value="overwrite"/>
+				</Enumeration>
+			</Property>
+			<Property defaultValue="close" description="" descriptionKey="closedata_tooltip.LABEL" label="Data File Processing after Each Step" labelKey="closedata.LABEL" name="closedata" syntax="CLOSEDATA=%%ThisValue%%" valueType="enum">
+				<Enumeration>
+					<Enum description="" descriptionKey="close_tooltip.LABEL" hasSubGroup="false" label="Close" labelKey="close.LABEL" mnemonic="C" mnemonicKey="close_mnemonic.VALUE" syntax="YES" value="close"/>
+					<Enum description="" descriptionKey="leaveopen_tooltip.LABEL" hasSubGroup="false" label="Leave open" labelKey="leaveopen.LABEL" mnemonic="L" mnemonicKey="leaveopen_mnemonic.VALUE" syntax="NO" value="leaveopen"/>
+				</Enumeration>
+			</Property>
+			<Property defaultValue="item_65_a" description="" descriptionKey="continueonerror_tooltip.LABEL" label="Error Handling" labelKey="continueonerror.LABEL" name="continueonerror" syntax="CONTINUEONERROR=%%ThisValue%%" valueType="enum">
+				<Enumeration>
+					<Enum description="" descriptionKey="item_65_a_tooltip.LABEL" hasSubGroup="false" label="Contineue with next file" labelKey="item_65_a.LABEL" mnemonic="N" mnemonicKey="item_65_a_mnemonic.VALUE" syntax="YES" value="item_65_a"/>
+					<Enum description="" descriptionKey="item_65_b_tooltip.LABEL" hasSubGroup="false" label="Stop processing" labelKey="item_65_b.LABEL" mnemonic="S" mnemonicKey="item_65_b_mnemonic.VALUE" syntax="no" value="item_65_b"/>
+				</Enumeration>
+			</Property>
+			<Property defaultValue="JOB" description="" descriptionKey="MACRONAME_tooltip.LABEL" label="Root name for macros and file handles:" labelKey="MACRONAME.LABEL" name="MACRONAME" syntax="MACRONAME=&quot;!%%ThisValue%%&quot;" valueType="string"/>
+		</Properties>
+		<UserInterface>
+			<Tabs>
+				<Tab helpLink="SPSSINC_PROCESS_FILES.htm">
+					<PropertiesPanel>
+						<ServerFileChooserControl mnemonic="X" mnemonicKey="syntax_mnemonic.VALUE" mode="open" property="syntax">
+							<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="3" gridWidth="1" rowWeight="0.0"/>
+						</ServerFileChooserControl>
+						<ServerDirectoryChooserControl mnemonic="O" mnemonicKey="outputdatadir_mnemonic.VALUE" mode="save" property="outputdatadir">
+							<Layout columnWeight="1.0" fill="horizontal" gridColumn="1" gridRow="0" gridWidth="1" rowWeight="0.0"/>
+						</ServerDirectoryChooserControl>
+						<RadioButtonGroupControl property="vieweroutput" rows="2" useSubPanel="false">
+							<Layout columnWeight="1.0" fill="both" gridColumn="1" gridRow="1" gridWidth="1" rowWeight="1.0"/>
+							<RadioButton property="viewerdir"/>
+							<RadioButton property="viewerfile"/>
+						</RadioButtonGroupControl>
+						<ServerDirectoryChooserControl mnemonic="L" mnemonicKey="viewerdestination_mnemonic.VALUE" mode="save" property="viewerdestination">
+							<Layout columnWeight="1.0" fill="horizontal" gridColumn="1" gridRow="2" gridWidth="1" rowWeight="0.0"/>
+						</ServerDirectoryChooserControl>
+						<ServerFileChooserControl mnemonic="J" mnemonicKey="logfile_mnemonic.VALUE" mode="save" property="logfile">
+							<Layout columnWeight="1.0" fill="horizontal" gridColumn="1" gridRow="3" gridWidth="1" rowWeight="0.0"/>
+						</ServerFileChooserControl>
+						<StaticText text="This procedure requires the Python\nprogrammability plug-in" textKey="item_20.LABEL">
+							<Layout columnWeight="1.0" fill="none" gridColumn="0" gridRow="4" gridWidth="1" rowWeight="0.0"/>
+						</StaticText>
+						<PropertiesPanel id="INPUTDATA" label="Input Data Files Specified by Wildcard Expression" labelKey="INPUTDATA.LABEL">
+							<Layout columnWeight="1.0" fill="both" gridColumn="0" gridRow="1" gridWidth="1" rowWeight="1.0"/>
+							<CheckBoxControl labelAbove="true" mnemonic="P" mnemonicKey="item_22_mnemonic.VALUE" property="item_22">
+								<Layout columnWeight="1.0" fill="none" gridColumn="0" gridRow="0" gridWidth="1" rowWeight="0.0"/>
+							</CheckBoxControl>
+							<ServerFileChooserControl mnemonic="F" mnemonicKey="inputdataspec_mnemonic.VALUE" mode="open" property="inputdataspec">
+								<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="1" gridWidth="1" leftIndent="8" rowWeight="1.0"/>
+							</ServerFileChooserControl>
+						</PropertiesPanel>
+						<PropertiesPanel id="FILELIST" label="Input Data Files Specified in a File" labelKey="FILELIST.LABEL">
+							<Layout columnWeight="1.0" fill="both" gridColumn="0" gridRow="2" gridWidth="1" rowWeight="1.0"/>
+							<CheckBoxControl labelAbove="true" mnemonic="T" mnemonicKey="item_25_mnemonic.VALUE" property="item_25">
+								<Layout columnWeight="1.0" fill="none" gridColumn="0" gridRow="0" gridWidth="1" rowWeight="0.0"/>
+							</CheckBoxControl>
+							<ServerFileChooserControl mnemonic="F" mnemonicKey="filelist_mnemonic.VALUE" mode="open" property="filelist">
+								<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="1" gridWidth="1" leftIndent="8" rowWeight="1.0"/>
+							</ServerFileChooserControl>
+						</PropertiesPanel>
+						<StaticText text="Choose either wildcard or file list to specify data files" textKey="item_27.LABEL">
+							<Layout columnWeight="1.0" fill="none" gridColumn="0" gridRow="0" gridWidth="1" rowWeight="0.0"/>
+						</StaticText>
+						<PropertiesSubPanel buttonDescription="Use this subdialog to define macros for use in the syntax file" buttonDescriptionKey="macrodefs_tooltip.LABEL" buttonLabel="Macro Definitions..." buttonLabelKey="macrodefs.LABEL" dialogTitle="Define Macros" dialogTitleKey="macrodefinitions.TITLE" helpLink="" mnemonic="D" mnemonicKey="macrodefs_mnemonic.VALUE">
+							<Layout columnWeight="0.0" fill="none" gridColumn="2" gridRow="0" gridWidth="1" rowWeight="0.0"/>
+							<PropertiesPanel>
+								<PropertiesPanel id="unquotedmacros" label="Macros Where Values Are Unquoted" labelKey="unquotedmacros.LABEL">
+									<Layout columnWeight="1.0" fill="both" gridColumn="0" gridRow="1" gridWidth="1" rowWeight="1.0"/>
+									<TextBoxControl mnemonic="1" mnemonicKey="parm1_mnemonic.VALUE" property="parm1">
+										<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="0" gridWidth="1" rowWeight="0.0"/>
+									</TextBoxControl>
+									<TextBoxControl mnemonic="2" mnemonicKey="parm2_mnemonic.VALUE" property="parm2">
+										<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="1" gridWidth="1" rowWeight="0.0"/>
+									</TextBoxControl>
+									<TextBoxControl mnemonic="3" mnemonicKey="PARM3_mnemonic.VALUE" property="PARM3">
+										<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="2" gridWidth="1" rowWeight="0.0"/>
+									</TextBoxControl>
+									<TextBoxControl mnemonic="4" mnemonicKey="PARM4_mnemonic.VALUE" property="PARM4">
+										<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="3" gridWidth="1" rowWeight="0.0"/>
+									</TextBoxControl>
+									<TextBoxControl mnemonic="5" mnemonicKey="PARM5_mnemonic.VALUE" property="PARM5">
+										<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="4" gridWidth="1" rowWeight="1.0"/>
+									</TextBoxControl>
+								</PropertiesPanel>
+								<PropertiesPanel id="quotedmacros" label="Macros Where Value is a Quoted Literal" labelKey="quotedmacros.LABEL">
+									<Layout columnWeight="1.0" fill="both" gridColumn="1" gridRow="1" gridWidth="1" rowWeight="1.0"/>
+									<TextBoxControl mnemonic="Q" mnemonicKey="QPARM1_mnemonic.VALUE" property="QPARM1">
+										<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="0" gridWidth="1" rowWeight="0.0"/>
+									</TextBoxControl>
+									<TextBoxControl mnemonic="A" mnemonicKey="QPARM2_mnemonic.VALUE" property="QPARM2">
+										<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="1" gridWidth="1" rowWeight="0.0"/>
+									</TextBoxControl>
+									<TextBoxControl mnemonic="M" mnemonicKey="QPARM3_mnemonic.VALUE" property="QPARM3">
+										<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="2" gridWidth="1" rowWeight="0.0"/>
+									</TextBoxControl>
+									<TextBoxControl property="QPARM4">
+										<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="3" gridWidth="1" rowWeight="0.0"/>
+									</TextBoxControl>
+									<TextBoxControl property="QPARM5">
+										<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="4" gridWidth="1" rowWeight="1.0"/>
+									</TextBoxControl>
+								</PropertiesPanel>
+								<StaticText text="Use single quotes in definitions if quoting is needed" textKey="item_92.LABEL">
+									<Layout columnWeight="1.0" fill="none" gridColumn="1" gridRow="2" gridWidth="1" rowWeight="0.0"/>
+								</StaticText>
+								<StaticText text="Define macros here that can be used in the syntax file." textKey="item_93.LABEL">
+									<Layout columnWeight="1.0" fill="none" gridColumn="0" gridRow="0" gridWidth="1" rowWeight="0.0"/>
+								</StaticText>
+								<StaticText text="Macro names will be the terms here preceded by !" textKey="item_94.LABEL">
+									<Layout columnWeight="1.0" fill="none" gridColumn="1" gridRow="0" gridWidth="1" rowWeight="0.0"/>
+								</StaticText>
+							</PropertiesPanel>
+						</PropertiesSubPanel>
+						<ServerFileChooserControl mnemonic="E" mnemonicKey="beforesyntax_mnemonic.VALUE" mode="open" property="beforesyntax">
+							<Layout columnWeight="1.0" fill="horizontal" gridColumn="1" gridRow="4" gridWidth="1" rowWeight="0.0"/>
+						</ServerFileChooserControl>
+						<ServerFileChooserControl mnemonic="A" mnemonicKey="aftersyntax_mnemonic.VALUE" mode="open" property="aftersyntax">
+							<Layout columnWeight="1.0" fill="horizontal" gridColumn="1" gridRow="5" gridWidth="1" rowWeight="0.0"/>
+						</ServerFileChooserControl>
+						<PropertiesSubPanel buttonLabel="Options..." buttonLabelKey="Options.LABEL" dialogTitle="Options" dialogTitleKey="OptionsDlg.TITLE" helpLink="" mnemonic="N" mnemonicKey="Options_mnemonic.VALUE">
+							<Layout columnWeight="0.0" fill="none" gridColumn="2" gridRow="1" gridWidth="1" rowWeight="0.0"/>
+							<PropertiesPanel>
+								<RadioButtonGroupControl property="logfilemode" rows="2" useSubPanel="false">
+									<Layout columnWeight="1.0" fill="both" gridColumn="0" gridRow="0" gridWidth="1" rowWeight="1.0"/>
+									<RadioButton property="append"/>
+									<RadioButton property="overwrite"/>
+								</RadioButtonGroupControl>
+								<RadioButtonGroupControl property="closedata" rows="2" useSubPanel="false">
+									<Layout columnWeight="1.0" fill="both" gridColumn="0" gridRow="1" gridWidth="1" rowWeight="1.0"/>
+									<RadioButton property="close"/>
+									<RadioButton property="leaveopen"/>
+								</RadioButtonGroupControl>
+								<RadioButtonGroupControl property="continueonerror" rows="2" useSubPanel="false">
+									<Layout columnWeight="1.0" fill="both" gridColumn="1" gridRow="0" gridWidth="1" rowWeight="1.0"/>
+									<RadioButton property="item_65_a"/>
+									<RadioButton property="item_65_b"/>
+								</RadioButtonGroupControl>
+								<TextBoxControl mnemonic="R" mnemonicKey="MACRONAME_mnemonic.VALUE" property="MACRONAME">
+									<Layout columnWeight="1.0" fill="horizontal" gridColumn="1" gridRow="1" gridWidth="1" rowWeight="0.0"/>
+								</TextBoxControl>
+							</PropertiesPanel>
+						</PropertiesSubPanel>
+						<StaticText text="This dialog was created using a later version of PASW Statistics\nand certain features may not function as intended." textKey="v17_warning.LABEL">
+							<Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="5" gridWidth="1" rowWeight="1.0"/>
+						</StaticText>
+					</PropertiesPanel>
+				</Tab>
+			</Tabs>
+		</UserInterface>
+	</Node>
+</Extension>

@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=utf-8">
+
+  <title>Zastosuj plik komend względem zestawu plików danych</title>
+  <style type="text/css">
+
+  <!-- 
+
+  H1 {font-weight:bold; color:#006699; font-size:125%; }
+  H2 {font-weight:bold; color:#006699; font-size:110%; }
+  TABLE {font-size:100%;}
+
+  /* paragraph tags */
+  .step {text-indent: -1.3em; margin-left:1.3em; margin-top: 0px;}
+  .menuselection {margin-left:10px}
+  .bullet {list-style-type: disc;margin-top:12px; margin-left:36px; text-indent:-1em; }
+  .codeblock {background-color: #ffffe6; display:block; margin-left:5px; padding:5px;}
+
+  /* inline tags */
+  .screen {font-weight:bold; color:#408080}                       /*** used refer to on-screen text ***/
+  .name {font-style: italic}                                                       /*** used to tag names, such as variable names, file names, and so forth ***/
+  .runinhead {font-weight: bold} 
+  .superscript {vertical-align:super; font-size:80%}
+  .subscript {vertical-align:sub; font-size:80%}
+
+
+  --> 
+  </style>
+</head>
+
+<body>
+  <h1>Zastosuj plik komend względem zestawu plików danych</h1>Ta
+  procedura umożliwia wyszukiwanie obserwacji w kolekcji plików
+  danych o podobnej strukturze i umożliwia wyświetlanie informacji
+  z obserwacji zgodnych z kryteriami wyszukiwania. Składnia może
+  zawierać dowolne komendy. Za pomocą makr i uchwytów plików można
+  tworzyć odniesienia do danych wejściowych i specyfikacji wyników.
+
+  <p>Użycie tej procedury z komendą SPSSINC SPLIT DATASET, która
+  może rozdzielić zbiór danych zgodnie z wartościami zmiennej
+  podziału, może okazać się bardzo wygodne.</p>
+
+  <p><span class="runinhead">Pliki danych wejściowych określane
+  przy użyciu wyrażenia z symbolami wieloznacznymi.</span> Wybierz
+  katalog do przetwarzania, a następnie opcjonalnie określ wzorzec
+  pliku. Na przykład,<br>
+  c:\mydata\x*.sav<br>
+  spowoduje przetwarzanie wszystkich plików sav w katalogu
+  c:\mydata, których nazwy zaczynają się od litery x.</p>
+
+  <p class="bullet">• Jeśli nie zostanie wprowadzone wyrażenie
+  nazwy pliku, wówczas zostanie przyjęte wyrażenie *.sav.</p>
+
+  <p class="bullet">• Należy wybrać tę opcję lub kolejną opcję
+  dotyczącą <span class="screen">danych wejściowych</span>, ale nie
+  obydwie.</p>
+
+  <p><span class="runinhead">Pliki danych wejściowych określone w
+  pliku.</span> Przetwarzane są wszystkie pliki określone w podanym
+  pliku.
+  Komenda SPSSINC SPLIT DATASET może wygenerować plik w
+  odpowiednim formacie.</p>
+
+  <p class="bullet">• Należy wybrać tę opcję lub poprzednią opcję
+  dotyczącą <span class="screen">danych wejściowych</span>, ale nie
+  obydwie.</p>
+
+  <p><span class="runinhead">Plik komend do wykonania dla każdego
+  pliku danych.</span> Plik komend zostanie wywołany dla każdego
+  wejściowego zbioru danych. Plik powinien zostać odczytany, a
+  następnie powinny zostać wykonane żądane operacje. Uchwyty plików
+  i makra są definiowane w celu tworzenia odniesień do pliku
+  wejściowego i różnych lokalizacji wyników. Uchwyty plików są
+  następujące.</p>
+
+  <ul>
+    <li>JOB_INPUTFILE: Plik wejściowy.</li>
+
+    <li>JOB_DATADIR: Katalog danych wejściowych</li>
+
+    <li>JOB_OUTPUTDATADIR: Określony katalog danych wyjściowych lub
+    <i>&lt;NONE&gt;</i></li>
+
+    <li>JOB_VIEWERDIR: Określony katalog danych wynikowych
+    raportu lub <i>&lt;NONE&gt;</i></li>
+  </ul>
+
+  <p class="bullet">• W przypadku pliku SAV dane można odczytać za
+  pomocą komendy<br>
+  GET FILE="JOB_INPUTFILE".</p>
+
+  <p class="bullet">• Makra są definiowane z takimi samymi nazwami,
+  ale ich nazwy zaczynają się od znaku "!". Zdefiniowane są dwa
+  dodatkowe makra.</p>
+
+  <ul>
+    <li>!JOB_DATAFILEROOT: Nazwa pliku danych wejściowych bez jej
+    rozszerzenia</li>
+
+    <li>!JOB_DATAFILEEXT: Rozszerzenie pliku danych wejściowych</li>
+  </ul>
+
+  <p>Tekst <i>!JOB</i> lub <i>JOB</i> został zastąpiony trzonem
+  nazwy określonym w kontroli trzon nazwy.</p>
+
+  <p class="bullet">• Tekst makra jest ujęty w cudzysłów. Oto
+  przykład kodu, którego można użyć w celu wyeksportowania zawartości
+  raportu do określonego katalogu raportu przy użyciu
+  nazwy pliku danych z rozszerzeniem .xls.<br></p>
+
+  <p class="code">DEFINE !out ()
+  !QUOTE(!CONCAT(!EVAL(!UNQUOTE(!JOB_VIEWERDIR)), "/",
+  !EVAL(!unquote(!JOB_DATAFILEROOT)), ".xls"))<br>
+  !ENDDEFINE.<br>
+  OUTPUT EXPORT/XLS DOCUMENTFILE =!out.</p>
+
+  <p><span class="runinhead">Katalog wynikowych plików
+  danych.</span> Jeśli katalog jest określony, wówczas dla każdego
+  zbioru danych plik zostanie zapisany w tym katalogu jako plik .sav,
+  po zakończeniu wykonywania komend. Taki sposób działania może
+  być przydatny podczas wykonywania przekształceń dla zestawu
+  plików. To pole można oczywiście pozostawić puste i zapisać w nim
+  dowolny wybrany wynik pliku danych. Uchwyt pliku
+  JOB_OUTPUTDATADIR lub makro !JOB_OUTPUTDATADIR identyfikuje
+  lokalizację danych wynikowych określoną w tej komendzie</p>
+
+  <p><span class="runinhead">Raport wynikowy.</span> Raport
+  wynikowy może być zapisywany w osobnym pliku dla
+  każdego pliku danych lub jako pojedynczy plik dla całego zadania. Zaznacz odpowiedni przełącznik, a następnie wprowadź nazwę
+  katalogu lub specyfikację pliku. Jeśli wybierzesz pojedynczy plik,
+  a następnie w kolejnej kontroli wprowadzisz tylko katalog,
+  wówczas plik otrzyma nazwę <i>VIEWER.SPV</i>. Przycisk Przeglądaj
+  dla tej kontroli umożliwia tylko określenie katalogu, ale można
+  wpisać nazwę pliku.</p>
+
+  <p><span class="runinhead">Zapisz dziennik zadania do pliku.</span> Określ plik dla dziennika zadania. Dziennik zawiera
+  pliki przetworzone oraz zapisane przez procedurę, każdy ze
+  znacznikiem czasu.</p>
+
+  <p class="bullet">• Operacje wykonywane przez plik komend nie są
+  rejestrowane.</p>
+
+  <p class="bullet">• Jeśli podczas przetwarzania pliku wystąpi
+  poważny błąd, wówczas w dzienniku pojawi się wpis dotyczący błędu.</p>
+
+  <p><span class="runinhead">Komendy do wykonania przed
+  przetwarzaniem.</span> Możliwe jest określenie pliku komend,
+  który zostanie wykonany jeden raz zanim rozpocznie się
+  przetwarzanie pliku wejściowego. Makra i uchwyty plików będą
+  zdefiniowane w taki sposób, jak dla pierwszego pliku na liście
+  przetwarzania. Jeśli wystąpi poważny błąd, wówczas przetwarzanie
+  zostanie zatrzymane.</p>
+
+  <p><span class="runinhead">Komendy do wykonania po wykonaniu
+  przetwarzania.</span> Możliwe jest określenie pliku komend,
+  który zostanie wykonany jeden raz po przetworzeniu wszystkich
+  plików wejściowych. Makra i uchwyty plików będą zdefiniowane w
+  taki sposób, jak dla ostatniego pliku na liście przetwarzania.</p>
+
+  <h2>Opcje</h2>
+
+  <p><span class="runinhead">Tryb pliku dziennika.</span> Wybierz,
+  czy pozycje dziennika dla zadania będą dołączane do istniejącego
+  pliku, czy zastąpią treść.</p>
+
+  <p><span class="runinhead">Przetwarzanie pliku danych po każdym
+  kroku.</span> Wybranie opcji <span class="screen">Zamknij</span>
+  spowoduje zamknięcie wszystkich zbiorów danych po każdej iteracji
+  przetwarzania pliku wejściowego.
+  Pozostawanie zbiorów danych otwartych po każdym kroku jest
+  użyteczne, jeśli konieczne jest połączenie wielu zbiorów danych w
+  jeden. Ostatni zbiór danych może zostać zapisany po wykonaniu tej
+  komendy.</p>
+
+  <p><span class="runinhead">Obsługa błędów.</span> Można wybrać,
+  czy po wystąpieniu błędu przetwarzanie będzie kontynuowane
+  (wybrany zostanie następny plik danych), czy przetwarzanie
+  kolejnych plików danych zostanie zatrzymane. Jeśli to możliwe,
+  dane wynikowe i pliki raportu nadal będą zapisywane dla
+  pliku danych, który spowodował błąd - nawet jeśli wybrano opcję
+  zatrzymania.</p>
+
+  <p><span class="runinhead">Trzon nazwy dla makr i uchwytów
+  plików.</span> Domyślnie zdefiniowane uchwyty plików i makra
+  mają przedrostek JOB i !JOB, a po nim - odpowiednio - znak
+  podkreślenia. Istnieje możliwość zdefiniowania przedrostka innego
+  niż JOB.
+  Ten przedrostek będzie poprzedzony znakiem ! (w przypadku
+  makr).<i>!</i>.</p>
+
+  <h2>Definicje makr</h2>
+
+  <p>Użyj tego podrzędnego okna dialogowego w celu definiowania
+  własnych makr, które mogą być używane w pliku komend. Możliwe
+  jest zdefiniowanie maksymalnie pięciu makr o nazwach od !PARM1 do
+  !PARM5, których wartości będą zgodne ze składnią standardową lub
+  będą nazwami zmiennych, a także maksymalnie pięć makr o nazwach od
+  !QPARM1 do !QPARM5, których wartości będą łańcuchami literałowymi
+  ujętymi w cudzysłowy. Łańcuch ujęty w cudzysłów jest użyteczny w
+  przypadku tytułów i wyrażeń łańcuchowych w przekształceniach.</p>
+
+  <p><span class="runinhead">Makra w miejscach, w których wartości
+  są bez cudzysłowów.</span> Wprowadź dowolny tekst makra
+  reprezentujący dowolną składnię komend SPSS, która powinna być widoczna
+  bez cudzysłowów.</p>
+
+  <p><span class="runinhead">Makra, w których wartość jest
+  literałem w cudzysłowiu.</span> Wprowadź dowolny tekst makra
+  reprezentujący składnię komend SPSS, która powinna być widoczna w
+  cudzysłowiu, np. tytuł, etykietę lub nazwę pliku.</p>
+
+  <p class="bullet">• Użyj cudzysłowów pojedynczych ('), jeśli
+  wymagane jest cytowanie literałów w definicji. Wygenerowany tekst
+  makra będzie ujęty w cudzysłowach podwójnych (").</p>
+
+  <h3>Przykład makra na potrzeby wyszukiwania konkretnego
+  identyfikatora obserwacji w plikach danych</h3>Załóżmy, że pewien
+  zbiór plików ma zmienną ID o nazwie PatientID, a użytkownik
+  zamierza znaleźć wszystkie wystąpienia identyfikatora "Johann
+  Schmidt". W pliku komend można użyć następującego fragmentu.
+  <code><br>
+  SELECT IF !PARM1 EQ !QPARM1.<br>
+  FREQUENCIES !PARM1.</code><br>
+  gdzie do zmiennej PARM1 należy wprowadzić PatientID, a do
+  zmiennej QPARM1 należy wprowadzić Johann Schmidt.
+
+  <p class="bullet">• Ustaw parametr Obsługa błędów na wartość
+  Przejdź do następnego pliku, ponieważ jeśli żadne obserwacje nie
+  zostaną wybrane, wówczas komenda FREQUENCIES wygeneruje błąd. (W celu pominięcia wynikowej tabeli ostrzeżeń można użyć OMS).</p>
+
+  <p class="bullet">• Zapisz raport wynikowy do
+  pojedynczego pliku, co ułatwi przeglądanie wyników.</p>
+
+  <h2>Program narzędziowy do wyszukiwania danych</h2>Wybierz opcje
+  Edycja&gt;Wyszukaj pliki danych, aby wyświetlić okno dialogowe, w
+  którym ta komenda służy do wyszukiwania obserwacji w zbiorze plików
+  SAV.
+
+  <h2>Funkcje dodatkowe</h2>Uruchom komendę<br>
+  SPSSINC PROCESS FILES /HELP.<br>
+  w celu wyświetlenia opisu całej składni. Przy użyciu tej komendy
+  można zapisać wynik w bieżącym katalogu roboczym procesora SPSS. Komenda SHOW DIRECTORY umożliwia wyświetlenie nazwy tego katalogu.
+
+  <p>Aby użyć pliku w celu określenia plików, które powinny być
+  przetwarzane, utwórz plik zawierający jedną nazwę na wiersz (wraz
+  ze ścieżką do pliku). Nazwa musi być ujęta w cudzysłowach
+  podwójnych (").
+  Wszystkie kolejne znaki w tej linii będą
+  ignorowane. Ignorowane są linie puste oraz zaczynające się od
+  symbolu #.</p>
+
+  <h2>Wymagania</h2>Ta komenda wymaga wtyczki Python
+  Programmability, którą można znaleźć na dysku instalacyjnym IBM
+  SPSS Statistics lub pobrać z serwisu SPSS Community pod adresem www.ibm.com/developerworks/spssdevcentral/.
+  <hr>
+
+  <p style="font-size:80%;">© Copyright IBM Corp. 1989, 2013</p>
+</body>
+</html>

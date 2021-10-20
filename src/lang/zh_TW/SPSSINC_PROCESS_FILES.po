@@ -1,166 +1,98 @@
-#/***********************************************************************
-# * Licensed Materials - Property of IBM 
-# *
-# * IBM SPSS Products: Statistics Common
-# *
-# * (C) Copyright IBM Corp. 1989, 2014
-# *
-# * US Government Users Restricted Rights - Use, duplication or disclosure
-# * restricted by GSA ADP Schedule Contract with IBM Corp. 
-# ************************************************************************/
-
-# NLS_ENCODING=UTF-8
-# IBMUPYTH
-
-
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR ORGANIZATION
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translations template for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
 #
+
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-21 17:51+China Standard Time\n"
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2021-10-11 00:53-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
-"Generated-By: pygettext.py 1.5\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Globalization Pipeline\n"
 
-
-#: SPSSINC_PROCESS_FILES.py:224
 msgid "---"
-msgstr ""
-"---"
+msgstr "---"
 
-#: SPSSINC_PROCESS_FILES.py:288
 msgid "Either FILELIST or INPUTDATA must be specified but not both"
-msgstr ""
-"必須指定 FILELIST 或 INPUTDATA，但不要同時指定二者"
+msgstr "必須指定 FILELIST 或 INPUTDATA，但不要同時指定二者"
 
-#: SPSSINC_PROCESS_FILES.py:290
 msgid "Cannot specify both VIEWERDIR and VIEWEROUTFILE"
-msgstr ""
-"不能同時指定 VIEWERDIR 和 VIEWEROUTFILE"
+msgstr "不能同時指定 VIEWERDIR 和 VIEWEROUTFILE"
 
-#: SPSSINC_PROCESS_FILES.py:292
 msgid "Must specify either a syntax file or searching but not both"
-msgstr ""
-"必須指定語法檔案或搜尋，但不要同時指定二者"
+msgstr "必須指定語法檔案或搜尋，但不要同時指定二者"
 
-#: SPSSINC_PROCESS_FILES.py:309
 msgid "MACRONAME must start with !"
-msgstr ""
-"MACRONAME 必須以 ! 開頭"
+msgstr "MACRONAME 必須以 ! 開頭"
 
-#: SPSSINC_PROCESS_FILES.py:337
 msgid "START: apply %(syntax)s to %(inputsource)s"
-msgstr ""
-"START：將 %(syntax)s 套用至 %(inputsource)s"
+msgstr "START：將 %(syntax)s 套用至 %(inputsource)s"
 
-#: SPSSINC_PROCESS_FILES.py:339
 msgid "START: searching in %(inputsource)s"
-msgstr ""
-"START：在 %(inputsource)s 中搜尋"
+msgstr "START：在 %(inputsource)s 中搜尋"
 
-#: SPSSINC_PROCESS_FILES.py:352
 msgid "Skipping %s: not a file"
-msgstr ""
-"跳過 %s：不是檔案"
+msgstr "跳過 %s：不是檔案"
 
-#: SPSSINC_PROCESS_FILES.py:376
 msgid ""
-"This version of IBM SPSS Statistics does not support \nextended characters in macro definitions.  Some macros will not be defined."
-msgstr ""
-"此版本的 IBM SPSS Statistics 不支援\n巨集定義中的延伸字元。將不定義部分巨集。"
+"This version of IBM SPSS Statistics does not support \nextended characters in "
+"macro definitions.  Some macros will not be defined."
+msgstr "此版本的 IBM SPSS Statistics 不支援\n巨集定義中的延伸字元。將不定義部分巨集。"
 
-#: SPSSINC_PROCESS_FILES.py:405
 msgid "Inserting beforesyntax file: %s."
-msgstr ""
-"插入 beforesyntax 檔案：%s。"
+msgstr "插入 beforesyntax 檔案：%s。"
 
-#: SPSSINC_PROCESS_FILES.py:408
 msgid "Serious error processing BEFORE file: %s.  Stopping"
-msgstr ""
-"處理 BEFORE 檔案 %s 時發生嚴重錯誤。正在停止"
+msgstr "處理 BEFORE 檔案 %s 時發生嚴重錯誤。正在停止"
 
-#: SPSSINC_PROCESS_FILES.py:412
 msgid "Defining: %(input)s and INSERTing %(syntax)s"
-msgstr ""
-"定義：%(input)s 和 INSERTing %(syntax)s"
+msgstr "定義：%(input)s 和 INSERTing %(syntax)s"
 
-#: SPSSINC_PROCESS_FILES.py:421
 msgid "Continuing"
-msgstr ""
-"繼續中"
+msgstr "繼續中"
 
-#: SPSSINC_PROCESS_FILES.py:421
 msgid "Serious error processing: %s.  %s"
-msgstr ""
-"處理 %s 時發生嚴重錯誤。%s"
+msgstr "處理 %s 時發生嚴重錯誤。%s"
 
-#: SPSSINC_PROCESS_FILES.py:421
 msgid "Stopping"
-msgstr ""
-"正在停止"
+msgstr "正在停止"
 
-#: SPSSINC_PROCESS_FILES.py:425 SPSSINC_PROCESS_FILES.py:437
-#: SPSSINC_PROCESS_FILES.py:460
 msgid "Writing %s"
-msgstr ""
-"正在寫入 %s"
+msgstr "正在寫入 %s"
 
-#: SPSSINC_PROCESS_FILES.py:429
 msgid "Error writing data file"
-msgstr ""
-"寫入資料檔案時發生錯誤"
+msgstr "寫入資料檔案時發生錯誤"
 
-#: SPSSINC_PROCESS_FILES.py:432
 msgid "Warning: file overwritten: %s"
-msgstr ""
-"警告：檔案已改寫：%s"
+msgstr "警告：檔案已改寫：%s"
 
-#: SPSSINC_PROCESS_FILES.py:441
 msgid "Error writing Viewer file"
-msgstr ""
-"寫入檢視器檔案時發生錯誤"
+msgstr "寫入檢視器檔案時發生錯誤"
 
-#: SPSSINC_PROCESS_FILES.py:446
 msgid "Warning: Output file overwritten: %s"
-msgstr ""
-"警告：輸出檔已改寫：%s"
+msgstr "警告：輸出檔已改寫：%s"
 
-#: SPSSINC_PROCESS_FILES.py:455
 msgid "Inserting aftersyntax file: %s."
-msgstr ""
-"插入 aftersyntax 檔案：%s。"
+msgstr "插入 aftersyntax 檔案：%s。"
 
-#: SPSSINC_PROCESS_FILES.py:458
 msgid "Serious error processing AFTER file: %s."
-msgstr ""
-"處理 AFTER 檔案 %s 時發生嚴重錯誤。"
+msgstr "處理 AFTER 檔案 %s 時發生嚴重錯誤。"
 
-#: SPSSINC_PROCESS_FILES.py:489
 msgid ": CLOSING LOG"
-msgstr ""
-": CLOSING LOG"
+msgstr ": CLOSING LOG"
 
-#: SPSSINC_PROCESS_FILES.py:521
 msgid "Bad format in filelist file: %s"
-msgstr ""
-"filelist 檔案 %s 中格式錯誤"
+msgstr "filelist 檔案 %s 中格式錯誤"
 
-#: SPSSINC_PROCESS_FILES.py:551
 msgid "Relative paths cannot be specified with a drive letter: %s"
-msgstr ""
-"無法使用磁碟機代號指定相對路徑：%s"
+msgstr "無法使用磁碟機代號指定相對路徑：%s"
 
-#: SPSSINC_PROCESS_FILES.py:555
 msgid "Directory or file does not exist: %s"
-msgstr ""
-"目錄或檔案不存在：%s"
-
-
-
+msgstr "目錄或檔案不存在：%s"

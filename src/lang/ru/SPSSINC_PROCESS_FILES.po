@@ -1,166 +1,101 @@
-#/***********************************************************************
-# * Licensed Materials - Property of IBM 
-# *
-# * IBM SPSS Products: Statistics Common
-# *
-# * (C) Copyright IBM Corp. 1989, 2014
-# *
-# * US Government Users Restricted Rights - Use, duplication or disclosure
-# * restricted by GSA ADP Schedule Contract with IBM Corp. 
-# ************************************************************************/
-
-# NLS_ENCODING=UTF-8
-# IBMUPYTH
-
-
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR ORGANIZATION
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translations template for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
 #
+
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-21 17:51+China Standard Time\n"
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2021-10-11 00:53-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
-"Generated-By: pygettext.py 1.5\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Globalization Pipeline\n"
 
-
-#: SPSSINC_PROCESS_FILES.py:224
 msgid "---"
-msgstr ""
-"---"
+msgstr "---"
 
-#: SPSSINC_PROCESS_FILES.py:288
 msgid "Either FILELIST or INPUTDATA must be specified but not both"
 msgstr ""
-"Должно быть указано ключевое слово FILELIST или INPUTDATA, но не оба одновременно"
+"Должно быть указано ключевое слово FILELIST или INPUTDATA, но не оба "
 
-#: SPSSINC_PROCESS_FILES.py:290
 msgid "Cannot specify both VIEWERDIR and VIEWEROUTFILE"
-msgstr ""
-"Нельзя задавать и VIEWERDIR, и VIEWEROUTFILE"
+msgstr "Нельзя задавать и VIEWERDIR, и VIEWEROUTFILE"
 
-#: SPSSINC_PROCESS_FILES.py:292
 msgid "Must specify either a syntax file or searching but not both"
-msgstr ""
-"Надо задать либо файл синтаксиса, либо поиск, но не то и другое вместе"
+msgstr "Надо задать либо файл синтаксиса, либо поиск, но не то и другое вместе"
 
-#: SPSSINC_PROCESS_FILES.py:309
 msgid "MACRONAME must start with !"
-msgstr ""
-"MACRONAME должно начинаться с !"
+msgstr "MACRONAME должно начинаться с !"
 
-#: SPSSINC_PROCESS_FILES.py:337
 msgid "START: apply %(syntax)s to %(inputsource)s"
-msgstr ""
-"START: применить %(syntax)s к %(inputsource)s"
+msgstr "START: применить %(syntax)s к %(inputsource)s"
 
-#: SPSSINC_PROCESS_FILES.py:339
 msgid "START: searching in %(inputsource)s"
-msgstr ""
-"START: поиск в %(inputsource)s"
+msgstr "START: поиск в %(inputsource)s"
 
-#: SPSSINC_PROCESS_FILES.py:352
 msgid "Skipping %s: not a file"
-msgstr ""
-"%s пропускается: это не файл"
+msgstr "%s пропускается: это не файл"
 
-#: SPSSINC_PROCESS_FILES.py:376
 msgid ""
-"This version of IBM SPSS Statistics does not support \nextended characters in macro definitions.  Some macros will not be defined."
+"This version of IBM SPSS Statistics does not support \nextended characters in "
+"macro definitions.  Some macros will not be defined."
 msgstr ""
-"Эта версия IBM SPSS Statistics не поддерживает \nрасширенные символы в определениях макрокоманд. Некоторые макрокоманды не будут определены."
+"Эта версия IBM SPSS Statistics не поддерживает \nрасширенные символы в "
+"определениях макрокоманд. Некоторые макрокоманды не будут определены."
 
-#: SPSSINC_PROCESS_FILES.py:405
 msgid "Inserting beforesyntax file: %s."
-msgstr ""
-"Вставка файла beforesyntax: %s."
+msgstr "Вставка файла beforesyntax: %s."
 
-#: SPSSINC_PROCESS_FILES.py:408
 msgid "Serious error processing BEFORE file: %s.  Stopping"
-msgstr ""
-"Серьезная ошибка при обработке файла BEFORE: %s. Выполняется остановка"
+msgstr "Серьезная ошибка при обработке файла BEFORE: %s. Выполняется остановка"
 
-#: SPSSINC_PROCESS_FILES.py:412
 msgid "Defining: %(input)s and INSERTing %(syntax)s"
-msgstr ""
-"Определение: %(input)s и вставка %(syntax)s"
+msgstr "Определение: %(input)s и вставка %(syntax)s"
 
-#: SPSSINC_PROCESS_FILES.py:421
 msgid "Continuing"
-msgstr ""
-"Процесс продолжается"
+msgstr "Процесс продолжается"
 
-#: SPSSINC_PROCESS_FILES.py:421
 msgid "Serious error processing: %s.  %s"
-msgstr ""
-"Серьезная ошибка при обработке: %s.  %s"
+msgstr "Серьезная ошибка при обработке: %s.  %s"
 
-#: SPSSINC_PROCESS_FILES.py:421
 msgid "Stopping"
-msgstr ""
-"Остановка"
+msgstr "Остановка"
 
-#: SPSSINC_PROCESS_FILES.py:425 SPSSINC_PROCESS_FILES.py:437
-#: SPSSINC_PROCESS_FILES.py:460
 msgid "Writing %s"
-msgstr ""
-"Запись %s"
+msgstr "Запись %s"
 
-#: SPSSINC_PROCESS_FILES.py:429
 msgid "Error writing data file"
-msgstr ""
-"Ошибка записи файла данных"
+msgstr "Ошибка записи файла данных"
 
-#: SPSSINC_PROCESS_FILES.py:432
 msgid "Warning: file overwritten: %s"
-msgstr ""
-"Предупреждение: файл перезаписан: %s"
+msgstr "Предупреждение: файл перезаписан: %s"
 
-#: SPSSINC_PROCESS_FILES.py:441
 msgid "Error writing Viewer file"
-msgstr ""
-"Ошибка при записи файла программы просмотра"
+msgstr "Ошибка при записи файла программы просмотра"
 
-#: SPSSINC_PROCESS_FILES.py:446
 msgid "Warning: Output file overwritten: %s"
-msgstr ""
-"Предупреждение: выходной файл перезаписан: %s"
+msgstr "Предупреждение: выходной файл перезаписан: %s"
 
-#: SPSSINC_PROCESS_FILES.py:455
 msgid "Inserting aftersyntax file: %s."
-msgstr ""
-"Вставка файла aftersyntax: %s."
+msgstr "Вставка файла aftersyntax: %s."
 
-#: SPSSINC_PROCESS_FILES.py:458
 msgid "Serious error processing AFTER file: %s."
-msgstr ""
-"Серьезная ошибка при обработке файла AFTER: %s."
+msgstr "Серьезная ошибка при обработке файла AFTER: %s."
 
-#: SPSSINC_PROCESS_FILES.py:489
 msgid ": CLOSING LOG"
-msgstr ""
-": CLOSING LOG"
+msgstr ": CLOSING LOG"
 
-#: SPSSINC_PROCESS_FILES.py:521
 msgid "Bad format in filelist file: %s"
-msgstr ""
-"Неверный формат файла filelist: %s"
+msgstr "Неверный формат файла filelist: %s"
 
-#: SPSSINC_PROCESS_FILES.py:551
 msgid "Relative paths cannot be specified with a drive letter: %s"
-msgstr ""
-"Относительные пути нельзя задавать с буквой диска: %s"
+msgstr "Относительные пути нельзя задавать с буквой диска: %s"
 
-#: SPSSINC_PROCESS_FILES.py:555
 msgid "Directory or file does not exist: %s"
-msgstr ""
-"Каталог или файл не существуют: %s"
-
-
-
+msgstr "Каталог или файл не существуют: %s"

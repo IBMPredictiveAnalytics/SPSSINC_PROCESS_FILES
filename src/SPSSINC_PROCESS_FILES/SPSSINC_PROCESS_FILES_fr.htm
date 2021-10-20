@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=utf-8">
+
+  <title>Application d'un fichier de syntaxe à un ensemble de fichiers de données</title>
+  <style type="text/css">
+
+  <!-- 
+
+  H1 {font-weight:bold; color:#006699; font-size:125%; }
+  H2 {font-weight:bold; color:#006699; font-size:110%; }
+  TABLE {font-size:100%;}
+
+  /* paragraph tags */
+  .step {text-indent: -1.3em; margin-left:1.3em; margin-top: 0px;}
+  .menuselection {margin-left:10px}
+  .bullet {list-style-type: disc;margin-top:12px; margin-left:36px; text-indent:-1em; }
+  .codeblock {background-color: #ffffe6; display:block; margin-left:5px; padding:5px;}
+
+  /* inline tags */
+  .screen {font-weight:bold; color:#408080}                       /*** used refer to on-screen text ***/
+  .name {font-style: italic}                                                       /*** used to tag names, such as variable names, file names, and so forth ***/
+  .runinhead {font-weight: bold} 
+  .superscript {vertical-align:super; font-size:80%}
+  .subscript {vertical-align:sub; font-size:80%}
+
+
+  --> 
+  </style>
+</head>
+
+<body>
+  <h1>Application d'un fichier de syntaxe à un ensemble de fichiers de données</h1>Cette procédure
+permet de traiter en boucle une collection de fichiers de données et d'appliquer le même ensemble
+de syntaxe à chacun d'eux. La syntaxe peut contenir n'importe quelle commande. Des macros et des
+descripteurs de fichiers sont fournis pour faire référence aux entrées et aux spécifications
+de sortie.
+
+  <p>Il est recommandé d'utiliser cette procédure conjointement à SPSSINC SPLIT DATASET, ce qui
+permet d'interrompre un jeu de données en fonction des valeurs d'une variable de scission.</p>
+
+  <p><span class="runinhead">Fichiers de données d'entrée indiqués par une expression
+générique :</span> Choisissez un répertoire à traiter et, facultativement, indiquez un modèle de
+fichier. Par exemple,<br>
+  c:\mydata\x*.sav<br>
+  entraîne le traitement de tous les fichiers sav du répertoire c:\mydata dont les noms commencent
+par la lettre x.</p>
+
+  <p class="bullet">• Si aucune expression de nom de fichier n'est fournie, l'expression *.sav est
+prise en compte.</p>
+
+  <p class="bullet">• Vous devez choisir cette option ou l'option <span class="screen">Données
+d'entrée</span> suivante mais pas les deux.</p>
+
+  <p><span class="runinhead">Fichiers de données d'entrée indiqués dans un fichier :</span> Traite
+tous les fichiers répertoriés dans le fichier indiqué.
+  La commande SPSSINC SPLIT DATASET peut générer un fichier au format correct.</p>
+
+  <p class="bullet">• Vous devez choisir entre cette option et l'option
+<span class="screen">Données d'entrée</span> précédente.</p>
+
+  <p><span class="runinhead">Fichier de syntaxe à exécuter pour chaque fichier de données :</span> Le
+fichier de syntaxe sera appelé pour chaque jeu de données d'entrée. Il doit lire le fichier et
+effectuer les opérations voulues. Des descripteurs de fichier et des macros sont définis pour faire
+référence au fichier d'entrée et aux différents emplacements de sortie. Les descripteurs de
+fichier sont les suivants :</p>
+
+  <ul>
+    <li>JOB_INPUTFILE : fichier d'entrée</li>
+
+    <li>JOB_DATADIR : répertoire des données d'entrée</li>
+
+    <li>JOB_OUTPUTDATADIR : répertoire de données de sortie indiqué ou <i>&lt;NONE&gt;</i></li>
+
+    <li>JOB_VIEWERDIR : fichier de sortie du visualiseur indiqué ou <i>&lt;NONE&gt;</i></li>
+  </ul>
+
+  <p class="bullet">• Pour un fichier SAV vous pouvez lire les données à l'aide de la commande<br>
+  GET FILE="JOB_INPUTFILE".</p>
+
+  <p class="bullet">• Les macros sont définies avec les mêmes noms sauf celles commençant par "!". Deux
+macros supplémentaires sont définies.</p>
+
+  <ul>
+    <li>!JOB_DATAFILEROOT : nom du fichier de données d'entrée sans son extension</li>
+
+    <li>!JOB_DATAFILEEXT : extension du fichier de données d'entrée</li>
+  </ul>
+
+  <p>Le texte <i>!JOB</i> ou <i>JOB</i> est remplacé par le nom de racine indiqué dans le contrôle
+de nom de racine.</p>
+
+  <p class="bullet">• Le texte de la macro est placé entre guillemets. Voici un exemple de code
+qui peut être utilisé pour exporter le contenu du visualisateur vers le répertoire de
+visualisateur indiqué en utilisant le nom du fichier de données ayant l'extension .xls.<br></p>
+
+  <p class="code">DEFINE !out () !QUOTE(!CONCAT(!EVAL(!UNQUOTE(!JOB_VIEWERDIR)), "/", !EVAL(!unquote(!JOB_DATAFILEROOT)), ".xls"))<br>
+  !ENDDEFINE.<br>
+  OUTPUT EXPORT /XLS DOCUMENTFILE =!out.</p>
+
+  <p><span class="runinhead">Répertoire des fichiers de données de sortie :</span> S'il est indiqué,
+pour chaque jeu de données, le fichier de données sera écrit en tant que fichier .sav dans ce
+répertoire une fois la syntaxe terminée. Ceci peut être utile pour effectuer les transformations
+relatives à un ensemble de fichiers. Vous pouvez, naturellement, laisser cette zone vide et écrire
+la sortie de fichier de données choisie. Le descripteur de fichier JOB_OUTPUTDATADIR ou la macro !JOB_OUTPUTDATADIR identifie l'emplacement des données de sortie indiquées dans
+cette commande.</p>
+
+  <p><span class="runinhead">Sortie du visualiseur :</span> La sortie du visualiseur peut être
+enregistrée dans un fichier distinct pour chaque fichier de données ou sous forme d'un fichier
+unique pour l'intégralité du travail. Sélectionnez le bouton radio approprié et entrez un
+nom de répertoire ou une spécification de fichier. Si vous optez pour l'écriture d'un fichier
+unique mais entrez uniquement un répertoire dans la commande suivante, le fichier s'appellera
+<i>VIEWER.SPV</i>. Le bouton Parcourir pour ce contrôle permet l'indication d'un répertoire mais
+vous pouvez entrer un nom de fichier.</p>
+
+  <p><span class="runinhead">Ecriture d'un journal de travail dans un fichier :</span> Indiquez
+un fichier pour un journal de travail. Le journal répertorie les fichiers traités et écrits par la
+procédure, chacun avec un horodatage.</p>
+
+  <p class="bullet">• Les opérations effectuées par le fichier de syntaxe ne sont pas
+enregistrées.</p>
+
+  <p class="bullet">• Si une erreur grave se produit pendant le traitement d'un fichier, il y aura
+une erreur d'entrée dans le journal.</p>
+
+  <p><span class="runinhead">Syntaxe à exécuter avant le traitement :</span> Vous pouvez indiquer
+un fichier de syntaxe qui sera exécuté une fois avant le lancement du traitement du fichier
+d'entrée. Les macros et les descripteurs de fichier seront définis comme pour le premier
+fichier dans la liste de traitement. Si une erreur grave se produit, le traitement est arrêté.</p>
+
+  <p><span class="runinhead">Syntaxe à exécuter une fois le traitement terminé :</span> Vous pouvez
+indiquer un fichier de syntaxe qui sera exécuté lorsque tous les fichiers d'entrée
+auront été exécutés. Les macros et les descripteurs de fichiers seront définis comme pour le
+dernier fichier dans la liste de traitement.</p>
+
+  <h2>Options</h2>
+
+  <p><span class="runinhead">Mode du fichier journal :</span> Indiquez si les entrées
+de journal pour le travail sont ajoutées à un fichier existant ou remplacent le contenu.</p>
+
+  <p><span class="runinhead">Traitement des fichiers de données après chaque étape :</span> Sélectionnez
+<span class="screen">Fermer</span> pour que tous les jeux de données soient fermés après chaque
+itération du traitement de fichier de données.
+  Il s'avère utile de conserver les jeux de données ouverts après chaque étape si vous combinez
+plusieurs jeux de données en un seul. Il se peut que le jeu de données final soit sauvegardé une
+fois cette commande terminée.</p>
+
+  <p><span class="runinhead">Gestion des erreurs :</span> Si une erreur se produit, vous pouvez
+choisir de poursuivre le traitement avec le fichier de données suivant ou d'arrêter le traitement
+de tout fichier. Lorsque cela est possible, les fichiers de données de sortie et du visualiseur
+seront écrits pour le fichier de données à l'origine de l'erreur même si l'arrêt a été demandé.</p>
+
+  <p><span class="runinhead">Nom de racine pour les macros et les descripteurs de fichier :</span> Par
+défaut, les descripteurs de fichiers et les macros définis ont le préfixe JOB et !JOB, suivi,
+respectivement par un caractère de soulignement. Vous pouvez indiquer un préfixe autre que JOB.
+  Le caractère ! sera ajouté au début du préfixe pour les macros.<i>!</i>.</p>
+
+  <h2>Définitions de macro</h2>
+
+  <p>Cette sous-boîte de dialogue permet de définir vos propres macros utilisables dans le fichier
+de syntaxe. Vous pouvez définir au maximum cinq macros !PARM1 à !PARM5, dont les valeurs
+correspondront à une valeur ordinaire ou à des noms de variables, et au maximum cinq macros,
+!QPARM1 à !QPARM5, dont les valeurs correspondent à des chaînes littérales entre guillemets. Les
+chaînes entre guillemets sont utiles pour les titres ou les expressions de chaîne dans les
+transformations.</p>
+
+  <p><span class="runinhead">Macros dont les valeurs ne sont pas entre guillemets :</span> Entrez
+pour la macro du texte représentant toute syntaxe SPSS qui doit apparaître sans guillemets.</p>
+
+  <p><span class="runinhead">Macros dont la valeur est un littéral entre guillemets :</span> Entrez
+pour la macro du texte représentant une syntaxe SPSS qui doit apparaître entre guillemets, par
+exemple, un titre, un libellé ou un nom de fichier.</p>
+
+  <p class="bullet">• Utilisez des apostrophes (') lorsque cela est nécessaire pour les littéraux
+dans la définition. Le texte de macro généré sera placé entre guillemets (").</p>
+
+  <h3>Exemple de macro de recherche de fichiers de données pour un ID d'observation
+particulier</h3>Supposons que certains ensembles de fichiers ont une variable ID appelée
+PatientID, et que vous voulez rechercher toutes les occurrences de l'ID "Johann Schmidt". Vous
+pouvez utiliser le fragment suivant dans votre fichier de syntaxe. <code><br>
+  SELECT IF !PARM1 EQ !QPARM1.<br>
+  FREQUENCIES !PARM1.</code><br>
+  avec indication de PatientID dans la zone PARM1 et de Johann Schmidt dans la zone QPARM1.
+
+  <p class="bullet">• Définissez le paramètre Error Handling pour poursuivre avec le
+fichier suivant car si aucune observation n'est sélectionnée, la commande FREQUENCIES générera une
+erreur. (OMS peut être utilisé pour supprimer le tableau des avertissements obtenus.)</p>
+
+  <p class="bullet">• Ecrivez la sortie du visualiseur dans un fichier unique pour faciliter
+l'affichage du résultat.</p>
+
+  <h2>Utilitaire de recherche de données</h2>Voir Edition&gt;Rechercher des fichiers de données en vue d'obtenir une boîte de dialogue qui utilise cette commande pour rechercher les
+observations dans un ensemble de fichiers SAV.
+
+  <h2>Fonctions supplémentaires</h2>Exécutez la commande<br>
+  SPSSINC PROCESS FILES /HELP.<br>
+  pour afficher la description intégrale de la syntaxe. A l'aide de la syntaxe, la sortie peut être
+écrite dans le répertoire de travail actif du processeur SPSS. La commande SHOW
+DIRECTORY affiche le nom de ce répertoire.
+
+  <p>Pour utiliser un fichier en vue d'indiquer les fichiers à traiter, créez un fichier avec un
+nom par ligne et son chemin d'accès. Le nom doit être placé entre guillemets (").
+  Tout élément suivant sur la ligne est ignoré. Les lignes vides et celles commençant par # sont
+ignorées.</p>
+
+  <h2>Conditions requises</h2>Cette commande requiert le plug-in de programmabilité Python, fourni
+sur le CD-ROM IBM SPSS Statistics, ou téléchargeable à partir de SPSS Developer Central (www.spss.com/devcentral).
+  <hr>
+
+  <p style="font-size:80%;">© Copyright IBM Corp. 1989, 2013</p>
+</body>
+</html>
