@@ -1,4 +1,5 @@
 Name: SPSSINC PROCESS FILES
+Display-Name: Run Syntax on Multiple Data Files
 Dialog-Specs: SPSSINC_PROCESS_FILES.spd
 Command-Specs: SPSSINC_PROCESS_FILES.xml
 Code-Files: SPSSINC_PROCESS_FILES.py
