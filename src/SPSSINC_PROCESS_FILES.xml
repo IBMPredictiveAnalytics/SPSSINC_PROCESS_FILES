@@ -13,7 +13,7 @@
 <!--                                                                   -->
 <!-- ***************************************************************** -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jon Peck (SPSS Inc.) -->
-<Command xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extension.xsd" Name="SPSSINC PROCESS FILES" Language="Python"  LanguageVersion="3">
+<Command xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extension.xsd" Name="SPSSINC PROCESS FILES" Language="Python" LanguageVersion="3">
 	<Subcommand Name="" IsArbitrary="False" Occurrence="Optional">
 		<Parameter Name="FILELIST" ParameterType="InputFile"/>
 		<Parameter Name="INPUTDATA" ParameterType="QuotedString"/>
@@ -22,13 +22,15 @@
 		<Parameter Name="AFTERSYNTAX" ParameterType="InputFile"/>
 		<Parameter Name="SEARCH" ParameterType="Keyword"/>
 		<Parameter Name="OUTPUTDATADIR" ParameterType="QuotedString"/>
-		<Parameter Name="VIEWERDIR" ParameterType="QuotedString"/>
-		<Parameter Name="VIEWERFILE" ParameterType="OutputFile"/>
+		<Parameter Name="OUTPUTDATATYPE" ParameterType="Keyword"/>
+		<Parameter Name="OUTPUTVIEWERDIR" ParameterType="QuotedString"/>
+		<Parameter Name="OUTPUTVIEWERTYPE" ParameterType="Keyword"/>
 		<Parameter Name="LOGFILE" ParameterType="OutputFile"/>
 		<Parameter Name="LOGFILEMODE" ParameterType="Keyword"/>
 		<Parameter Name="MACRONAME" ParameterType="QuotedString"/>
 		<Parameter Name="CONTINUEONERROR" ParameterType="Keyword"/>
 		<Parameter Name="CLOSEDATA" ParameterType="Keyword"/>
+		<Parameter Name="CLOSEVIEWER" ParameterType="Keyword"/>
 	</Subcommand>
 	<Subcommand Name="MACRODEFS">
 		<Parameter Name="ITEMS" ParameterType="LeadingToken"/>

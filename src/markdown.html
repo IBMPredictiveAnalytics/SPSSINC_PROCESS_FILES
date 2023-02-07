@@ -10,9 +10,6 @@
 <link rel="stylesheet" type="text/css" href="extsyntax.css" />
 
 
-
-
-
 </head>
 
 <body>
@@ -20,21 +17,32 @@
 
 <p>Execute a file of syntax on a batch of data files
 specified in a list or with a wild card</p>
+
+<p>The file "Batch Reporting with IBM SPSS Statistics.pdf",
+  which contains an expository article on usage of this command,
+  is installed in the SPSSINC_PROCESS_FILES directory under the extensions
+  directory.  Start with that in learning to use this procedure.
+  </p>
+  <p>To find that directory, run SHOW EXT in a syntax window and look at the
+EXTPATHS EXENSIONS section.
+</p>
 <div class="syntax">
 <p>SPSSINC PROCESS FILES
-FILELIST=&ldquo;<em>input data file specification</em>&rdquo; or INPUTDATA=&ldquo;<em>directory wildcard specification&rdquo;<br/>
-SYNTAX=&ldquo;*syntax file to apply to each input file</em>&rdquo; 
-BEFORESYNTAX=&ldquo;<em>syntax file to apply before starting iterations</em>&rdquo;<br/>
-AFTERSYNTAX=&ldquo;<em>syntax file to apply after all iterations are complete</em>&rdquo;<br/>
+FILELIST=<em>"input data file specification"</em> or INPUTDATA="<em>directory wildcard specification"<sup>&#42;</sup></em><br/>
+SYNTAX="<em>syntax file to apply to each input file</em>"<br/>
+BEFORESYNTAX="<em>syntax file to apply before starting iterations</em>"<br/>
+AFTERSYNTAX="<em>syntax file to apply after all iterations are complete</em>"<br/>
 SEARCH=NO<sup>&#42;&#42;</sup> or YES<br/>
-OUTPUTDATADIR=&ldquo;<em>directory for data output</em>&rdquo;<br/>
-VIEWERDIR=&ldquo;<em>directory for Viewer output</em>&rdquo; or VIEWERFILE=&ldquo;<em>file for a single Viewer output</em>&rdquo;<br/>
-LOGFILE=&ldquo;<em>log file</em>&rdquo;<br/>
+OUTPUTDATADIR="<em>directory for data output</em>"<br/>
+OUTPUTDATATYPE=SAV or XLS or CSV<BR/>
+OUTPUTVIEWERDIR="<em>output directory for Viewer output</em>"<br/>
+OUTPUTVIEWERTYPE=SPV or XLS or XLSX or PDF or HTML or PPT or TXT or DOC<br/> 
+LOGFILE="<em>log file</em>"<br/>
 LOGFILEMODE=APPEND<sup>&#42;&#42;</sup> or OVERWRITE<br/>
-MACRONAME=&ldquo;<em>root name for macros and file handles</em>&rdquo;<br/>
+MACRONAME="<em>root name for macros and file handles</em>"<br/>
 CONTINUEONERROR=YES<sup>&#42;&#42;</sup> or NO<br/>
-CLOSEDATA=YES<sup>&#42;&#42;</sup> or NO</p>
-
+CLOSEDATA=YES<sup>&#42;&#42;</sup> or NO<br/>
+CLOSEVIEWER=YES<sup>&#42;&#42;</sup> or NO<br/>
 <p>/MACRODEFS PARM1=&ldquo;<em>text</em>&rdquo; PARM2=&ldquo;<em>text</em>&rdquo; &hellip; PARM5=&ldquo;<em>text</em>&rdquo;<br/>
 QPARM1=&ldquo;<em>text</em>&rdquo; QPARM2=&ldquo;<em>text</em>&rdquo; &hellip; QPARM5=&ldquo;<em>text</em>&rdquo;</p>
 
@@ -45,11 +53,10 @@ QPARM1=&ldquo;<em>text</em>&rdquo; QPARM2=&ldquo;<em>text</em>&rdquo; &hellip; Q
 <p>SPSSINC PROCESS FILES /HELP displays this help and does nothing else.</p>
 
 
-
 <pre class="example"><code>SPSSINC PROCESS FILES DIRECTORY=&quot;c:/mydata/*.sav&quot;
-SYNTAX=&quot;c:/myjobs/mysyntax.sps&quot; LOGFILE=&quot;c:/myjobs/log.txt&quot; 
-VIEWERDIR=&quot;c:/myoutput&quot;
-/MACRODEFS PARM1=&quot;x &gt; 10&quot;.
+SYNTAX="c:/myjobs/mysyntax.sps" LOGFILE="c:/myjobs/log.txt"
+OUTPUTVIEWERDIR="c:/myoutput" OUTPUTVIEWERTYPE=PDF
+/MACRODEFS PARM1="x &gt; 10".
 </code></pre>
 
 <p><strong>INPUTDATA</strong> can specify a directory to process and, optionally, a file pattern.<br/>
@@ -57,14 +64,13 @@ For example,</p>
 
 <pre><code>c:/mydata/x*.sav
 </code></pre>
-
 <p>would process all the sav files in directory c:\mydata whose names start with the letter x.
-*.sav is assumed if DIRECTORY does not include a file pattern.</p>
+</p>
 
 <p>Alternatively, <strong>FILELIST</strong> specifies processing all of the files listed in the indicated file.<br/>
 In order to use a file to specify the files that should be processed, create a file
 with one name per line including the path to the file.  The names in the file must be enclosed
-in double quotes (&ldquo;).  Anything following on the line is ignored.<br/>
+in double quotes (").  Anything following on the line is ignored.<br/>
 Blank lines and lines starting with # are ignored.</p>
 
 <p>The SPSSINC SPLIT DATASET command can produce a file in the correct format
@@ -77,30 +83,94 @@ It should include the appropriate command to read the data file or other inputs 
 the file handles or macros defined to refer to the input file and various output 
 locations.  It is a common error to forget to open the input file in the syntax
 file being applied.</p>
+<p>It should also include code to save the output data and viewer files as needed.
+SPSSINC PROCESS FILES does not automatically save these files.
+</p?
 
 <p>The file handles are as follows.</p>
 
 <ul>
-<li>JOB_INPUTFILE: The input file, including any directory path specified</li>
+<li>JOB_INPUTFILE: The input file.  This is the full file specification including the location.</li>
 <li>JOB_DATADIR: The input data directory</li>
-<li>JOB_OUTPUTDATADIR: The specified output data directory or <code>&lt;NONE&gt;</code></li>
-<li>JOB_VIEWERDIR: The specified Viewer output directory or <code>&lt;NONE&gt;</code></li>
+<li>JOB_OUTPUTDATA:  A file specification for an output data file path including a file name</li>
+<li>JOB_OUTPUTDATADIR: The specified output data directory or <NONE></li>
+<li>JOB_OUTPUTVIEWER: A file specification for a Viewer output path including a file name</li>
+<li>JOB_OUTPUTVIEWERDIR: The specified Viewer output directory or <NONE></li>
 </ul>
 
 <p>For a SAV file you could read the data with the command<br/>
-<code>GET FILE=&quot;JOB_INPUTFILE&quot;.</code></p>
+<code>GET FILE="JOB_INPUTFILE".</code></p>
 
-<p>Macros are defined with these same names except starting with &rdquo;!&ldquo;.  Two
-additional macros are defined.</p>
+<p> Here is a complete example of a SYNTAX file that saves an Excel file for each input file
+from the Viewer.
+It uses the input file name base name for titles.
+<pre class="example"><code>
+TITLE !JOB_DATAFILEROOT.
 
+GET file="JOB_INPUTFILE".
+
+TEXT "The data for this report come from the"
+"OECD Programme for International Student Assessment, 2018.".
+
+* Custom Tables.
+CTABLES
+  /TABLE CNTRYID BY TC198Q01HA [COUNT ROWPCT.COUNT]
+  /CATEGORIES VARIABLES=CNTRYID TC198Q01HA ORDER=A KEY=VALUE 
+  EMPTY=EXCLUDE MISSING=EXCLUDE
+  /TITLES TITLE='Country = ' !JOB_DATAFILEROOT.
+
+GRAPH
+  /BAR(SIMPLE)=COUNT BY TC198Q01HA.
+
+OUTPUT EXPORT
+  /!JOB_OUTPUTVIEWERTYPE DOCUMENTFILE='JOB_OUTPUTVIEWER'.
+</code></pre>
+
+<p>Macros are defined with these same names except starting with &rdquo;!&ldquo;.  
+Additional macros are defined.</p>
 <ul>
+<li>!JOB_OUTPUTVIEWERTYPE, the file format specified for output, defaulting to spv</li>
 <li>!JOB_DATAFILEROOT: The name of the input data file without its extension and
 excluding the path information</li>
-<li>!JOB_DATAFILEEXT: The extension of the input data file</li>
+<li>JOB_DATAFILEEXT: The extension of the input data file</li>
+<li>!JOB_OUTPUTDATATYPE as defined by the OUTPUTDATATYPE keyword, defaulting to "sav"</li>
 </ul>
+<p>Using the OUTPUT EXPORT command or other output commands, each set of Viewer output could be exported as xlsx or
+other formats.<br/>
+<code>
+OUTPUT EXPORT
+  /!JOB_EXPORTFILETYPE DOCUMENTFILE='JOB_EXPORTFILE'.
+</code>
+</p>
+
+<p Here is a complete example of a SYNTAX file that saves an Excel file for each input file.
+It uses the input file name base name for titles.
+<pre class="example><code>
+TITLE !JOB_DATAFILEROOT.
+
+GET file="JOB_INPUTFILE".
+
+TEXT "The data for this report come from the"
+"OECD Programme for International Student Assessment, 2018.".
+
+* Custom Tables.
+CTABLES
+  /TABLE CNTRYID BY TC198Q01HA [COUNT ROWPCT.COUNT]
+  /CATEGORIES VARIABLES=CNTRYID TC198Q01HA ORDER=A KEY=VALUE 
+  EMPTY=EXCLUDE MISSING=EXCLUDE
+  /TITLES TITLE='Country = ' !JOB_DATAFILEROOT.
+
+GRAPH
+  /BAR(SIMPLE)=COUNT BY TC198Q01HA.
+
+OUTPUT EXPORT
+  /!JOB_OUTPUTVIEWERTYPE DOCUMENTFILE='JOB_OUTPUTVIEWER'.
+</p>
+
+
 
 <p>Macro text is quoted.  Here is an example of code that might be used in the
-syntax file to export output to the VIEWERDIR as an Excel file using the data file rootname.
+syntax file to export output to the OUTPUTVIEWERDIR as an Excel file using the data file rootname.
 The text !JOB or JOB is replaced by the root name specified in MACRONAME.</p>
 
 <pre><code>define !out () !quote(!concat(!unquote(!eval(!job_viewerdir)), &quot;/&quot;, !unquote(!eval(!job_datafileroot)), &quot;.xls&quot;))
@@ -124,6 +194,7 @@ GET DATA /TYPE=XLSX
 SAVE OUTFILE=!out.
 </code></pre>
 
+
 <p><strong>BEFORESYNTAX</strong> and <strong>AFTERSYNTAX</strong> can specify syntax files to be executed
 before or after any input files are processed.  The before file will have all the file handles
 and macros as set for the first input file, and the after file will have these items as set
@@ -144,21 +215,18 @@ Either SYNTAX or SEARCH must be specified but not both.</p>
 <p>If <strong>CLOSEDATA</strong> is YES, all data files are automatically closed 
 after each syntax file invocation.</p>
 
+<p>If <strong>CLOSEVIEWER</strong> is YES, all Viewer files are automatically closed 
+after each syntax file invocation.</p>
+
 <p>It may be convenient to use this procedure in combination with SPSSINC SPLIT DATASET,
 which can break up a dataset according to the values of a splitting variable.</p>
 
-<p>If <strong>OUTPUTDATADIR</strong> is specified, after the syntax completes for each iteration
-the active data file will be written as an .sav file to that directory .
-This can be useful when carrying out transformations for a set of files.
-You can, of course, leave this field blank and write any data file output you choose.<br/>
-The <code>JOB_OUTPUTDATADIR</code> file handle and <code>!JOB_OUTPUTDATADIR</code> macro 
+<p>The <code>JOB_OUTPUTDATADIR</code> file handle and <code>!JOB_OUTPUTDATADIR</code> macro 
 identify the data output location specified in PROCESS FILES.</p>
 
-<p>Viewer output can be saved either in a separate spv file for each data file or as a single
-file for the entire job by specifying either <strong>VIEWERDIR</strong> or <strong>VIEWERFILE</strong>
-and entering either a directory name or a file specification.  </p>
+<p>Viewer output can be saved either in a separate spv or other format file for each data file
+or, if CLOSEVIEWER=NO, the entire Viewer contents are available after the command completes .
 
-<p>If VIEWERFILE specifies only a directory, the file will be named VIEWER.SPV.</p>
 
 <p><strong>LOGFILE</strong> specifies a file that will contain a log of actions carried out by
 PROCESS FILES (not what happens in the invoked syntax), including an entry if
@@ -223,7 +291,7 @@ these will be expanded properly in Statistics version 18 or later, but in earlie
 will not work with directory specifications or where a wildcard expression is
 allowed.</p>
 
-<p>&copy; Copyright IBM Corp. 1989, 2014</p>
+<p>&copy; Copyright IBM Corp. 1989, 2023</p>
 
 </body>
 

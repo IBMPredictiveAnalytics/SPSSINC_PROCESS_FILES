@@ -1,16 +1,22 @@
 Name: SPSSINC PROCESS FILES
-Display-Name: Run Syntax on Multiple Data Files
-Dialog-Specs: SPSSINC_PROCESS_FILES.spd
+Display-Name: Process Data Files
+Dialog-Specs: SPSSINC_PROCESS_FILES.cfe,SPSSINC_PROCESS_FILES.spd
 Command-Specs: SPSSINC_PROCESS_FILES.xml
 Code-Files: SPSSINC_PROCESS_FILES.py
-Misc-Files: extsyntax.css,IBMdialogicon.png,markdown.html
+Misc-Files: extsyntax.css,SPSSINC_PROCESS_FILES.htm,IBMdialogicon.png,
+ Batch Reporting with IBM SPSS Statistics.docx,Batch Reporting with IB
+ M SPSS Statistics.pdf,markdown.html
 Summary: Apply a file of syntax to a set of data files
 Description: This procedure applies a file of syntax to each of a grou
  p of selected files. It defines file handles and macros for use in th
  e syntax file, and provides various options for handling Viewer and d
- ata output.
+ ata output.  This version of PROCESS FILES is not compatible with the
+  older (2.0 and earlier) versions, so code changes would be required
+ for users of that version to upgrade.  The older version (2.0) can, h
+ owever be installed as SPSSINC_PROCESS_FILESORIG from the Extension H
+ ub
 Author: JKP, IBM SPSS
-Version: 2.0.0
+Version: 2.1.0
 Product-Version: 24
 Date: 1/2/2014
 Product-Version-Maximum: 99
