@@ -13,7 +13,7 @@ from extension import Template, Syntax, processcmd
 import locale, os, glob, re, codecs, time, random
 
 __author__ =  'spss, JKP'
-__version__=  '1.2.2'
+__version__=  '1.3.0'
 
 # history
 # 15-feb-2010 original version
@@ -24,166 +24,20 @@ __version__=  '1.2.2'
 # 06-apr-2010 add specific support for searching in files
 # 21-apr-2010 add before and after syntax files
 # 09-dec-2011 file handle support for logfile
+# 02-feb-2023 major rework for simplification
 
-helptext = """SPSSINC PROCESS FILES
-FILELIST="input data filespec" or INPUTDATA="directory wildcard spec"
-SYNTAX="syntax filespec" [BEFORESYNTAX=filespec] [AFTERSYNTAX=filespec]
-SEARCH={NO*|YES}
-[OUTPUTDATADIR="directory for data output"]
-[VIEWERDIR="directory for Viewer output" or VIEWERFILE="filespec for single Viewer output"]
-[LOGFILE="logfile spec"] [LOGFILEMODE={APPEND*|OVERWRITE}
-[MACRONAME="root name for macros and file handles"]
-[CONTINUEONERROR={YES*|NO}]
-[CLOSEDATA={YES*|NO}
-[/MACRODEFS PARM1="text" PARM2="text" ... PARM5="text" 
-QPARM1="text" QPARM2="text" ... QPARM5="text"]
-
-Example:
-SPSSINC PROCESS FILES DIRECTORY="c:/mydata/*.sav"
-SYNTAX="c:/myjobs/mysyntax.sps" LOGFILE="c:/myjobs/log.txt" 
-VIEWERDIR="c:/myoutput"
-/MACRODEFS PARM1="x > 10".
-
-The block of syntax specified in SYNTAX will be executed for each matching file.  
-It should include the appropriate command to read the data file or other inputs.
-File handles and macros are defined to refer to the input file and various output 
-locations.  
-
-The file handles are as follows.
-JOB_INPUTFILE: The input file
-JOB_DATADIR: The input data directory
-JOB_OUTPUTDATADIR: The specified output data directory or <NONE>
-JOB_VIEWERDIR: The specified Viewer output directory or <NONE>
-
-For a SAV file you could read the data with the command
-GET FILE="JOB_INPUTFILE".
-Macros are defined with these same names except starting with "!".  Two
-additional macros are defined.
-!JOB_DATAFILEROOT: The name of the input data file without its extension
-!JOB_DATAFILEEXT: The extension of the input data file
-
-Macro text is quoted.  Here is an example of code that might be used in the
-syntax file to export output to the VIEWERDIR in Excel using the data file rootname.
-
-define !out () !quote(!concat(!unquote(!eval(!job_viewerdir)), "/", !unquote(!eval(!job_datafileroot)), ".xls"))
-!enddefine.
-output export /xls DOCUMENTFILE =!out.
-
-The text !JOB or JOB is replaced by the root name specified in MACRONAME.
-
-BEFORESYNTAX and/or AFTERSYNTAX can specify syntax files to be inserted
-before or after any other files are processed.  The before file will have all the file handles
-and macros as set for the first input file, and the after file will have these items as set
-for the last file processed.
-
-A serious error in BEFORESYNTAX always stops processing.  The
-CONTINUEONERROR setting determines whether the AFTERSYNTAX file is
-executed if there is an error.
-
-Instead of SYNTAX, SEARCH can be specified to search files according to
-parameters passed as !PARM1, !PARM2, and !PARM3.
-!PARM1 defines the search condition as a boolean expression as would be
-used with SELECT IF
-!PARM2 is the id variable. !PARM3 is any other variables to be listed with the results.
-Either SYNTAX or SEARCH must be specified but not both.
-
-If CLOSEDATA is YES, the default, all data files are automatically closed 
-after each syntax file invocation.
-
-DIRECTORY can specify a directory to process and, optionally, a file pattern.  
-For example,
-c:/mydata/x*.sav
-would process all the sav files in directory c:\mydata whose names start with the letter x.
-*.sav is assumed if DIRECTORY does not include a file pattern.
-
-Alternatively, FILELIST specifies processing all of the files listed in the indicated file.  
-In order to use a file to specify the files that should be processed, create a file
-with one name per line including the path to the file.  The name must be enclosed
-in double quotes (").  Anything following on the line is ignored.  
-Blank lines and lines starting with # are ignored.
-
-The SPSSINC SPLIT DATASET command can produce a file in the correct format
-for FILELIST.
-
-Either DIRECTORY or FILELIST must be specified but not both.
-
-It may be convenient to use this procedure in combination with SPSSINC SPLIT DATASET,
-which can break up a dataset according to the values of a splitting variable.
-
-If OUTPUTDATADIR is specified, after the syntax completes for each iteration
-the active data file will be written as an .sav file to that directory .
-This can be useful when carrying out transformations for a set of files.
-You can, of course, leave this field blank and write any data file output you choose.  
-The JOB_OUTPUTDATADIR file handle and !JOB_OUTPUTDATADIR macro 
-identify the data output location specified in PROCESS FILES.
-
-Viewer output can be saved either in a separate file for each data file or as a single
-file for the entire job by specifying either VIEWERDIR or VIEWERFILE
-and entering either a directory name or a file specification.  
-
-If VIEWERFILE specifies only a directory, the file will be named VIEWER.SPV.
-
-LOGFILE can specify a file that will contain a log of actions carried out by
-this command (not what happens in the invoked syntax), including an entry if
-the syntax generates a serious error (level 3 or higher).  LOGFILEMODE
-can be APPEND or OVERWRITE.  The file is written in Unicode (utf-8).
-
-If a serious error occurs while executing the syntax file, you can choose whether 
-to continue processing with the next data file or to stop processing any further 
-files by specifying CONTINUEONERROR= YES or NO.
-If possible, the output data and Viewer files will still be written for the data file
-that caused the error even if stopping is specified.
-
-MACRODEFS can be used to define macros that can be referenced in
-the syntax file that is repeatedly executed.  Each macro name matches the PARMn
-or QPARMn parameter with a preceding !.  These macros are defined after the 
-macros described above each time a file is processed, so they can refer to the 
-stadard macro values.
-The definition will be wrapped in quotes and hence be interpreted as a literal
-if QPARM is used.  The paramters must always be quoted in the MACRODEFS
-subcommand.
-
-If a macro is not defined, it will automatically be defined as empty.
-
-Example:  with this syntax
-/MACRODEF PARM1="education >= 12 and education <=16" PARM2="educ age",
-the syntax job could contain this code to do frequencies on qualifying data.
-SELECT IF !PARM1.
-FREQ !PARM2.
-
-This construct could also be used to search for a particular id, say, across files
-/MACRODEF PARM1="ID = 12345" PARM2 = "ID"
-and, in the syntax file,
-SELECT IF !PARM1.
-FREQ !PARM2.
-But for a literal, say, as a table title, you would use QPARM:
-CTABLES ...  /TITLES TITLE=!QPARM1.
-with /MACRODEFS QPARM1="The Title".
-
-In these examples, you should use CONTINUEONERROR=YES, since
-the SELECT will result in 0 cases in the data if none meet the criteria.
-
-A complete version of a search syntax file is included with this package.
-
-If any of the file or directory specifications to this command use SPSS file handles,
-these will be expanded properly in V18 or later, but in earlier versions, they
-will not work with directory specifications or where a wildcard expression is
-allowed.
-
-/HELP displays this help and does nothing else.
-"""
+helptext = """SPSSINC PROCESS FILES"""
 
 def Run(args):
     """Execute the SPSSINC PROCESS FILES extension command"""
-    
-    ##debugging
+        
+    # debugging
+            # makes debug apply only to the current thread
     #try:
         #import wingdbstub
-        #if wingdbstub.debugger != None:
-            #import time
-            #wingdbstub.debugger.StopDebug()
-            #time.sleep(2)
-            #wingdbstub.debugger.StartDebug()
+        #import threading
+        #wingdbstub.Ensure()
+        #wingdbstub.debugger.SetDebugThreads({threading.get_ident(): 1})
     #except:
         #pass
 
@@ -197,13 +51,19 @@ def Run(args):
         Template("AFTERSYNTAX", subc="", ktype="literal", var="aftersyntax"),
         Template("SEARCH", subc="", ktype="bool", var="search"),
         Template("OUTPUTDATADIR", subc="", ktype="literal", var="outputdatadir"),
-        Template("VIEWERDIR", subc="", ktype="literal", var="viewerdir"),
-        Template("VIEWERFILE", subc="", ktype="literal", var="viewerfile"),
+        Template("OUTPUTDATATYPE", subc="", ktype="str", var="outputdatatype",
+            vallist=["sav", "zsav", "xls", "csv"]),
+        Template("OUTPUTVIEWERDIR", subc="", ktype="literal", var="outputviewerdir"),
+        Template("OUTPUTVIEWERTYPE", subc="", ktype="str", var="outputviewertype",
+            vallist= ["spv", "xls", "xlsx", "pdf", "html", "ppt", "txt", "doc"]), 
         Template("LOGFILE", subc="", ktype="literal", var="logfile"),
-        Template("LOGFILEMODE", subc="" , ktype="str", var="logfilemode", vallist=['append','overwrite']),
+        Template("LOGFILEMODE", subc="" , ktype="str", var="logfilemode",
+            vallist=['append','overwrite']),
         Template("MACRONAME", subc="", ktype="literal", var="macroname"),
         Template("CONTINUEONERROR", subc="", ktype="bool", var="continueonerror"),
         Template("CLOSEDATA", subc="", ktype="bool", var="closedata"),
+        Template("CLOSEVIEWER", subc="", ktype="bool", var="closeviewer"),
+        
         Template("PARM1", subc="MACRODEFS", ktype="literal", var="parm1"),
         Template("PARM2", subc="MACRODEFS", ktype="literal", var="parm2"),
         Template("PARM3", subc="MACRODEFS", ktype="literal", var="parm3"),
@@ -215,6 +75,7 @@ def Run(args):
         Template("QPARM4", subc="MACRODEFS", ktype="literal", var="qparm4"),
         Template("QPARM5", subc="MACRODEFS", ktype="literal", var="qparm5"),
         Template("ITEMS", subc="MACRODEFS", ktype="str", var="ignore"),
+        
         Template("HELP", subc="", ktype="bool")])
     
     
@@ -251,32 +112,16 @@ try:    #override
     from extension import helper
 except:
     pass
-def applySyntaxToFiles(syntax=None, search=False, inputdata=None, filelist=None,  outputdatadir=None, 
-    viewerdir=None, viewerfile=None, logfile=None, macroname="!JOB", 
-    continueonerror=True, closedata=True, logfilemode="append", 
+def applySyntaxToFiles(syntax=None, search=False, inputdata=None, filelist=None,
+    outputdatadir=None, outputdatatype="sav", 
+    outputviewerdir=None, outputviewertype="spv",
+    logfile=None,  logfilemode="append", macroname="!JOB", 
+    continueonerror=True, closedata=True, closeviewer=True, 
     parm1=None, parm2=None, parm3=None, parm4=None, parm5=None,
     qparm1=None, qparm2=None, qparm3=None, qparm4=None, qparm5=None, ignore=None,
     beforesyntax=None, aftersyntax=None):
-    """Apply a syntax file to each file matching inputspec or item in filelist, and optionally write output and data files.
-    
-    inputdata is a wildcard directory specification of data files to process.  E.,g., "c:/mydata/*.sav"
-    filelist is a list of files in the format produced by SPSSINC SPLIT FILES
-    Exactly one of these must be given.
-    syntax is a filespec for a syntax file to execute via the INSERT command
-    search indicates file searching
-    If outputdatadir is not None, each input file will be written to the specified data directory after processing.
-    
-    If viewerdir is not None, the designated Viewer window will be written to that directory and closed
-    after processing each input file.  It will have the input data file name but with an spv extension.
-    If viewerfile, alternatively, is specified, all the output remaining in the active Viewer will be written 
-    to that single file at the end of the entire job.
-    If logfile is not None, a log of file progress will be written as a plain text file.  If it is a directory,
-    the log will be written to LOG.TXT in that directory
-    If errors occur on INSERT, continueonerror determines whether processing continues.
-    If closedata, all data files are automatically closed after each iteration.
-    beforesyntax and aftersyntax can name syntax files to be run before and after
-    other files are processed.
-    """
+    """Apply a syntax file to each file matching inputspec or item in filelist,
+    and optionally write output and data files."""
     
     #* !PARM1 defines the search condition.
     #* !PARM2 is the id variable. !PARM3 is any other variables to be listed.
@@ -291,6 +136,8 @@ SUMMARIZE  /TABLE !PARM2
   /TITLE='Matched Cases'  /CELLS=NONE.
 omsend."""
 
+    #if viewerfile == "":   # The CDB can't handle an empty field with a keyword assignment
+        #viewerfile = None
     myenc = locale.getlocale()[1]  # get current encoding in case conversions needed
     cwd = spssaux.getShow("DIRECTORY")
     global unicodeit   #hate to do this
@@ -306,21 +153,23 @@ omsend."""
     
     if (not (inputdata is None) ^ (filelist is None)):
         raise ValueError(_("Either FILELIST or INPUTDATA must be specified but not both"))
-    if viewerdir and viewerfile:
-        raise ValueError(_("Cannot specify both VIEWERDIR and VIEWEROUTFILE"))
+    #if viewerdir and viewerfile:
+        #raise ValueError(_("Cannot specify both VIEWERDIR and VIEWEROUTFILE"))
     if not ((syntax is not None) ^ search):
         raise ValueError(_("Must specify either a syntax file or searching but not both"))
     
     fhandles = Handles()
     
-    if viewerdir:
-        viewerdir = fhandles.resolve(viewerdir)
-    viewerdir = unescape(viewerdir)
-    viewerdir = tiltslash(fixloc(viewerdir, cwd, isdir=True))
-    viewerfile = tiltslash(unescape(viewerfile))
+    if outputviewerdir:
+        outputviewerdir = fhandles.resolve(outputviewerdir)
+    outputviewerdir = unescape(outputviewerdir)
+    outputviewerdir = tiltslash(fixloc(outputviewerdir, cwd, isdir=True))
+    ###viewerfile = tiltslash(unescape(viewerfile))
     
-    if viewerfile and os.path.isdir(viewerfile):
-        viewerfile = fixloc(viewerfile, cwd) + "VIEWER.SPV"
+    ###if viewerfile and os.path.isdir(viewerfile):
+    #if viewerfile is not None and os.path.isdir(viewerfile):
+        #raise ValueError(_("Viewer file is only a directory.  A file specification is required to use this option."))
+    ###viewerfile = fixloc(viewerfile, cwd) + "VIEWER.SPV"
         
     if logfile:
         logfile = fhandles.resolve(logfile)
@@ -386,10 +235,10 @@ omsend."""
             try:
                 spss.SetMacroValue(macroname + "_DATAFILEROOT", quotewrap(datafileroot))  # just the root name
                 spss.SetMacroValue(macroname + "_DATAFILEEXT", quotewrap(datafileext)) # just the extension
-                spss.SetMacroValue(macroname + "_DATADIR", quotewrap(datadir)) # no trailing separator.  Can be blank
+                ###spss.SetMacroValue(macroname + "_DATADIR", quotewrap(outputdatadir)) # no trailing separator.  Can be blank
                 spss.SetMacroValue(macroname + "_INPUTFILE", quotewrap(input)) # full input file spec
                 spss.SetMacroValue(macroname + "_OUTPUTDATADIR", (quotewrap(outputdatadir  or "<NONE>")))                
-                spss.SetMacroValue(macroname + "_VIEWERDIR", (quotewrap(viewerdir or "<NONE>")))
+                spss.SetMacroValue(macroname + "_OUTPUTVIEWERDIR", (quotewrap(outputviewerdir or "<NONE>")))
             except (UnicodeEncodeError, UnicodeDecodeError):
                 # do not translate this message
                 if not warned:
@@ -402,7 +251,31 @@ extended characters in macro definitions.  Some macros will not be defined."""))
             # output data directory if specified
             spss.Submit(filehandlesyn % (macroname[1:] + "_OUTPUTDATADIR", outputdatadir or "<NONE>"))
             # directory for Viewer output if specified
-            spss.Submit(filehandlesyn % (macroname[1:] + "_VIEWERDIR",  (viewerdir or "<NONE>")))
+            spss.Submit(filehandlesyn % (macroname[1:] + "_VIEWERDIR",  (outputviewerdir or "<NONE>")))
+            
+            # create output and export file handles and macros 
+            # ignoring any / or \ at the end of the directory name as input
+            # The SAVE TRANSLATE command treats file handles incorrectly and tacks on a file type
+            # extension, so the extension is omitted in the file handle unless it is sav
+            if outputdatadir:  # specification for output data file to be written by user INSERT file
+                outputdatadir = re.sub(r"[\\/]$", "", outputdatadir)
+                spec = outputdatadir + "/"+ nameparts[0] + "." + outputdatatype  # output data filespec per iteration
+                if outputdatatype not in ["sav", "zsav"]:
+                    specnoext = outputdatadir + "/"+ nameparts[0]  # output data filespec per iteration, no extension
+                else:
+                    specnoext = spec
+                spss.Submit(filehandlesyn % (macroname[1:] + "_OUTPUTDATA", specnoext))
+                spss.SetMacroValue(macroname + "_OUTPUTDATA", spec)
+            spss.SetMacroValue(macroname + "_OUTPUTDATATYPE", outputdatatype)
+            
+            if outputviewerdir:  # specification for output export file to be written by user code
+                outputviewerdir = re.sub(r"[\\/]$", "", outputviewerdir)
+                spec = outputviewerdir + "/" + nameparts[0] + "." + outputviewertype
+                spss.Submit(filehandlesyn % (macroname[1:] + "_OUTPUTVIEWER", spec))
+                spss.Submit(filehandlesyn % (macroname[1:] + "_OUTPUTVIEWERDIR", outputviewerdir))
+                spss.SetMacroValue(macroname + "_OUTPUTVIEWERDIR", outputviewerdir + "/" +
+                    nameparts[0] + "." + outputviewertype)
+            spss.SetMacroValue(macroname + "_OUTPUTVIEWERTYPE", outputviewertype)
             
             for i, parmdef in enumerate(zip([parm1, parm2, parm3, parm4, parm5],
                 [qparm1, qparm2, qparm3, qparm4, qparm5])):
@@ -440,34 +313,25 @@ extended characters in macro definitions.  Some macros will not be defined."""))
             except:
                 log.write(_("Serious error processing: %s.  %s") % (input, continueonerror and _("Continuing") or _("Stopping")))
                 failed = True
-            if outputdatadir:
-                outname = outputdatadir + os.sep + datafileroot + ".sav"
-                log.write(_("Writing %s") % outname)
-                try:
-                    spss.Submit('SAVE OUTFILE="%s".' % outname)
-                except:
-                    log.write(_("Error writing data file"))
-                ncoutname = os.path.normpath(outname)
-                if ncoutname in outnameset:
-                    log.write(_("Warning: file overwritten: %s") % ncoutname)
-                outnameset.add(ncoutname)
 
-            if viewerdir:
-                outputname = viewerdir + datafileroot + ".spv"
-                log.write(_("Writing %s") % outputname)
-                try:
-                    spss.Submit('OUTPUT SAVE OUTFILE="%s".' % outputname) # save designated window
-                except:
-                    log.write(_("Error writing Viewer file"))
-                    return    ### debug
-                spss.Submit("OUTPUT CLOSE *.")
-                ncoutputname = os.path.normcase(outputname)
-                if ncoutputname in outviewerset:
-                    log.write(_("Warning: Output file overwritten: %s") % ncoutputname)
-                outviewerset.add(ncoutputname)
+            #if outputviewerdir:
+                #outputname = outputviewerdir + datafileroot + ".spv"
+                #log.write(_("Writing %s") % outputname)
+                #try:
+                    #spss.Submit('OUTPUT SAVE OUTFILE="%s".' % outputname) # save designated window
+                #except:
+                    #log.write(_("Error writing Viewer file"))
+                    #return    ### debug
+                #spss.Submit("OUTPUT CLOSE *.")
+                #ncoutputname = os.path.normcase(outputname)
+                #if ncoutputname in outviewerset:
+                    #log.write(_("Warning: Output file overwritten: %s") % ncoutputname)
+                #outviewerset.add(ncoutputname)
             if closedata:
                 spss.Submit("""DATASET CLOSE ALL.
             NEW FILE.""")
+            if closeviewer:
+                spss.Submit("""OUTPUT CLOSE NAME=*""")
             if failed and not continueonerror:
                 break
         if aftersyntax and (continueonerror or not failed) and not beforefailed:
@@ -476,16 +340,16 @@ extended characters in macro definitions.  Some macros will not be defined."""))
                 spss.Submit("""INSERT FILE="%s".""" % aftersyntax)
             except:
                 log.write(_("Serious error processing AFTER file: %s.") % aftersyntax)
-        if viewerfile:
-            log.write(_("Writing %s") % viewerfile)
-            spss.Submit('OUTPUT SAVE NAME=* OUTFILE="%s".' % viewerfile)
+        #if viewerfile:
+            #log.write(_("Writing %s") % viewerfile)
+            #spss.Submit('OUTPUT SAVE NAME=* OUTFILE="%s".' % viewerfile)
     
-def quotewrap(item):
-    """wrap item in double quotes and return it.
+def quotewrap(item, qchar='"'):
+    """wrap item in quotes using SPSS quote within quote rule and return it.
     
     item is a stringlike object"""
     
-    return '"' + item + '"'
+    return qchar + item.replace(qchar, qchar+qchar) + qchar
 
 class Writelog(object):
     """Manage a log file"""

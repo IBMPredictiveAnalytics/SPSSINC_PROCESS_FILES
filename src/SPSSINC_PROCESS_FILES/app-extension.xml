@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--***********************************************************************--><!----><!--Licensed Materials - Property of IBM--><!----><!--IBM SPSS Products: Modeler Common--><!----><!--(C) Copyright IBM Corp. 1989, 2023--><!----><!--US Government Users Restricted Rights - Use, duplication or disclosure--><!--restricted by GSA ADP Schedule Contract with IBM Corp.--><!----><!--***********************************************************************--><AppExtension xmlns="http://xml.spss.com/pasw/extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" debug="false" version="8.0" xsi:schemaLocation="http://xml.spss.com/pasw/extension http://xml.spss.com/pasw/extension/AppExtension.xsd">
+  <ExtensionDetails copyright="(c) 2023 SPSS, Inc." description="Application extension for PySpark" id="SPSSINC_PROCESS_FILES" label="Process Files" provider="IBM SPSS, Inc." providerTag="SPSS"/>
+  <ExtensionName name="extension"/>
+  <Application name="statistics">
+    <AppFeature dialogTitleKey="SPSSINC_PROCESS_FILES" featureId="SPSSINC_PROCESS_FILES">
+      <Validations/>
+      <AppDetails>
+        <ProcedureInfo titleKey="SPSSINC_PROCESS_FILES_proc_title"/>
+        <AppUserInterface>
+          <Menus>
+            <MenuItem actionIDToName="" featureId="SPSSINC_PROCESS_FILES" imagePath="C:\Users\jkpec\AppData\Local\Temp\spss16452\_uibuilder1721408504383005491.tmp\IBMdialogicon.png" installToGlobalCustomMenu="false" isSpssNative="false" menuFrame="all" menuVersion="2" offset="15" previousId="" resourceKey="SPSSINC_PROCESS_FILES" separatorAfter="none" separatorBefore="false" showIcon="false" spssMenu="Utilities"/>
+          </Menus>
+        </AppUserInterface>
+        <SyntaxGeneration syntaxTemplate="SPSSINC PROCESS FILES %%INPUTDATA_syntax%% %%FILELIST_syntax%%&#13;&#10;%%syntax_syntax%% %%outputdatadir_syntax%% OUTPUTDATATYPE=%%outputdatatype_syntax%%&#13;&#10;%%outputviewerdir_syntax%% OUTPUTVIEWERTYPE=%%outputviewertype_syntax%% &#13;&#10;%%closedata_syntax%% %%closeviewer_syntax%% %%continueonerror_syntax%%&#13;&#10;%%logfile_syntax%% %%logfilemode_syntax%%&#13;&#10;%%beforesyntax_syntax%% %%aftersyntax_syntax%% %%macroname_syntax%%&#13;&#10;/MACRODEFS ITEMS %%unquotedmacros_syntax%%%%item_93_syntax%%%%quotedmacros_syntax%%%%item_92_syntax%%%%item_94_syntax%%">
+          <SyntaxProperty name="macrodefs" syntax=""/>
+          <SyntaxProperty name="unquotedmacros" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="unquotedmacros_syntax" syntax="%%parm1_syntax%% %%parm2_syntax%% %%PARM3_syntax%% %%PARM4_syntax%% %%PARM5_syntax%% "/>
+          <SyntaxItem name="parm1_syntax" syntax="PARM1=&quot;%%parm1%%&quot;">
+            <SyntaxCondition condition="isNotEmpty" operand="true" property="parm1"/>
+          </SyntaxItem>
+          <SyntaxProperty exteriorQuotes="&quot;" name="parm1" quoteType="Syntax" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="parm2_syntax" syntax="PARM2=&quot;%%parm2%%&quot;">
+            <SyntaxCondition condition="isNotEmpty" operand="true" property="parm2"/>
+          </SyntaxItem>
+          <SyntaxProperty exteriorQuotes="&quot;" name="parm2" quoteType="Syntax" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="PARM3_syntax" syntax="PARM3=&quot;%%PARM3%%&quot;">
+            <SyntaxCondition condition="isNotEmpty" operand="true" property="PARM3"/>
+          </SyntaxItem>
+          <SyntaxProperty exteriorQuotes="&quot;" name="PARM3" quoteType="Syntax" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="PARM4_syntax" syntax="PARM4=&quot;%%PARM4%%&quot;">
+            <SyntaxCondition condition="isNotEmpty" operand="true" property="PARM4"/>
+          </SyntaxItem>
+          <SyntaxProperty exteriorQuotes="&quot;" name="PARM4" quoteType="Syntax" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="PARM5_syntax" syntax="PARM5=&quot;%%PARM5%%&quot;">
+            <SyntaxCondition condition="isNotEmpty" operand="true" property="PARM5"/>
+          </SyntaxItem>
+          <SyntaxProperty exteriorQuotes="&quot;" name="PARM5" quoteType="Syntax" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="item_93_syntax" syntax="%%item_93%%"/>
+          <SyntaxProperty name="item_93" syntax="%%ThisValue%%"/>
+          <SyntaxProperty name="quotedmacros" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="quotedmacros_syntax" syntax="%%QPARM1_syntax%% %%QPARM2_syntax%% %%QPARM3_syntax%% %%QPARM4_syntax%% %%QPARM5_syntax%% "/>
+          <SyntaxItem name="QPARM1_syntax" syntax="QPARM1=&quot;%%QPARM1%%&quot;">
+            <SyntaxCondition condition="isNotEmpty" operand="true" property="QPARM1"/>
+          </SyntaxItem>
+          <SyntaxProperty exteriorQuotes="&quot;" name="QPARM1" quoteType="Syntax" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="QPARM2_syntax" syntax="QPARM2=&quot;%%QPARM2%%&quot;">
+            <SyntaxCondition condition="isNotEmpty" operand="true" property="QPARM2"/>
+          </SyntaxItem>
+          <SyntaxProperty exteriorQuotes="&quot;" name="QPARM2" quoteType="Syntax" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="QPARM3_syntax" syntax="QPARM3=&quot;%%QPARM3%%&quot;">
+            <SyntaxCondition condition="isNotEmpty" operand="true" property="QPARM3"/>
+          </SyntaxItem>
+          <SyntaxProperty exteriorQuotes="&quot;" name="QPARM3" quoteType="Syntax" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="QPARM4_syntax" syntax="QPARM4=&quot;%%QPARM4%%&quot;">
+            <SyntaxCondition condition="isNotEmpty" operand="true" property="QPARM4"/>
+          </SyntaxItem>
+          <SyntaxProperty exteriorQuotes="&quot;" name="QPARM4" quoteType="Syntax" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="QPARM5_syntax" syntax="QPARM5=&quot;%%QPARM5%%&quot;">
+            <SyntaxCondition condition="isNotEmpty" operand="true" property="QPARM5"/>
+          </SyntaxItem>
+          <SyntaxProperty exteriorQuotes="&quot;" name="QPARM5" quoteType="Syntax" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="item_92_syntax" syntax="%%item_92%%"/>
+          <SyntaxProperty name="item_92" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="item_94_syntax" syntax="%%item_94%%"/>
+          <SyntaxProperty name="item_94" syntax="%%ThisValue%%"/>
+          <SyntaxProperty name="Options" syntax=""/>
+          <SyntaxProperty name="logfilemode" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="logfilemode_syntax" syntax="LOGFILEMODE=APPEND">
+            <SyntaxCondition condition="equals" operand="append" property="logfilemode"/>
+          </SyntaxItem>
+          <SyntaxItem name="logfilemode_syntax" syntax="LOGFILEMODE=OVERWRITE">
+            <SyntaxCondition condition="equals" operand="overwrite" property="logfilemode"/>
+          </SyntaxItem>
+          <SyntaxProperty name="closedata" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="closedata_syntax" syntax="CLOSEDATA=YES">
+            <SyntaxCondition condition="equals" operand="close" property="closedata"/>
+          </SyntaxItem>
+          <SyntaxItem name="closedata_syntax" syntax="CLOSEDATA=NO">
+            <SyntaxCondition condition="equals" operand="leaveopen" property="closedata"/>
+          </SyntaxItem>
+          <SyntaxProperty name="closeviewer" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="closeviewer_syntax" syntax="CLOSEVIEWER=YES">
+            <SyntaxCondition condition="equals" operand="item_115_a" property="closeviewer"/>
+          </SyntaxItem>
+          <SyntaxItem name="closeviewer_syntax" syntax="CLOSEVIEWER=NO">
+            <SyntaxCondition condition="equals" operand="item_115_b" property="closeviewer"/>
+          </SyntaxItem>
+          <SyntaxProperty name="continueonerror" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="continueonerror_syntax" syntax="CONTINUEONERROR=YES">
+            <SyntaxCondition condition="equals" operand="item_65_a" property="continueonerror"/>
+          </SyntaxItem>
+          <SyntaxItem name="continueonerror_syntax" syntax="CONTINUEONERROR=no">
+            <SyntaxCondition condition="equals" operand="item_65_b" property="continueonerror"/>
+          </SyntaxItem>
+          <SyntaxItem name="macroname_syntax" syntax="MACRONAME=&quot;!%%macroname%%&quot;">
+            <SyntaxCondition condition="isNotEmpty" operand="true" property="macroname"/>
+          </SyntaxItem>
+          <SyntaxProperty exteriorQuotes="&quot;" name="macroname" quoteType="Syntax" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="syntax_syntax" syntax="SYNTAX=&quot;%%syntax%%&quot;"/>
+          <SyntaxProperty name="syntax" syntax="%%ThisValue%%"/>
+          <SyntaxProperty name="INPUTDATA" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="item_22_syntax" syntax="%%item_22%%">
+            <SyntaxCondition condition="equals" operand="true" property="item_22"/>
+          </SyntaxItem>
+          <SyntaxProperty name="item_22" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="INPUTDATA_syntax" syntax="">
+            <SyntaxCondition condition="equals" operand="false" property="item_22"/>
+          </SyntaxItem>
+          <SyntaxItem name="INPUTDATA_syntax" syntax="%%INPUTDATA_inputdataspec_syntax%% ">
+            <SyntaxCondition condition="equals" operand="true" property="item_22"/>
+          </SyntaxItem>
+          <SyntaxItem name="INPUTDATA_inputdataspec_syntax" syntax="%%inputdataspec_syntax%%">
+            <SyntaxCondition condition="equals" operand="true" property="item_22"/>
+          </SyntaxItem>
+          <SyntaxItem name="inputdataspec_syntax" syntax="INPUTDATA=&quot;%%inputdataspec%%&quot;">
+            <SyntaxCondition condition="equals" operand="true" property="item_22"/>
+          </SyntaxItem>
+          <SyntaxProperty name="inputdataspec" syntax="%%ThisValue%%"/>
+          <SyntaxProperty name="FILELIST" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="item_25_syntax" syntax="%%item_25%%">
+            <SyntaxCondition condition="equals" operand="true" property="item_25"/>
+          </SyntaxItem>
+          <SyntaxProperty name="item_25" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="FILELIST_syntax" syntax="">
+            <SyntaxCondition condition="equals" operand="false" property="item_25"/>
+          </SyntaxItem>
+          <SyntaxItem name="FILELIST_syntax" syntax="%%FILELIST_filelist_syntax%% ">
+            <And>
+              <SyntaxCondition condition="equals" operand="true" property="item_25"/>
+              <SyntaxCondition condition="equals" operand="false" property="item_22"/>
+            </And>
+          </SyntaxItem>
+          <SyntaxItem name="FILELIST_filelist_syntax" syntax="%%filelist_syntax%%">
+            <SyntaxCondition condition="equals" operand="true" property="item_25"/>
+          </SyntaxItem>
+          <SyntaxItem name="filelist_syntax" syntax="FILELIST=&quot;%%filelist%%&quot;">
+            <SyntaxCondition condition="equals" operand="true" property="item_25"/>
+          </SyntaxItem>
+          <SyntaxProperty name="filelist" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="beforesyntax_syntax" syntax="BEFORESYNTAX=&quot;%%beforesyntax%%&quot;"/>
+          <SyntaxProperty name="beforesyntax" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="aftersyntax_syntax" syntax="AFTERSYNTAX=&quot;%%aftersyntax%%&quot;"/>
+          <SyntaxProperty name="aftersyntax" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="outputdatadir_syntax" syntax="OUTPUTDATADIR=&quot;%%outputdatadir%%&quot;"/>
+          <SyntaxProperty name="outputdatadir" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="outputviewerdir_syntax" syntax="OUTPUTVIEWERDIR=&quot;%%outputviewerdir%%&quot;"/>
+          <SyntaxProperty name="outputviewerdir" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="logfile_syntax" syntax="LOGFILE=&quot;%%logfile%%&quot;"/>
+          <SyntaxProperty name="logfile" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="outputviewertype_syntax" syntax="SPV">
+            <SyntaxCondition condition="equals" operand="item_62_1" property="outputviewertype"/>
+          </SyntaxItem>
+          <SyntaxItem name="outputviewertype_syntax" syntax="XLS">
+            <SyntaxCondition condition="equals" operand="exportfiletype_2" property="outputviewertype"/>
+          </SyntaxItem>
+          <SyntaxItem name="outputviewertype_syntax" syntax="XLSX">
+            <SyntaxCondition condition="equals" operand="exportfiletype_3" property="outputviewertype"/>
+          </SyntaxItem>
+          <SyntaxItem name="outputviewertype_syntax" syntax="PDF">
+            <SyntaxCondition condition="equals" operand="exportfiletype_4" property="outputviewertype"/>
+          </SyntaxItem>
+          <SyntaxItem name="outputviewertype_syntax" syntax="HTML">
+            <SyntaxCondition condition="equals" operand="exportfiletype_5" property="outputviewertype"/>
+          </SyntaxItem>
+          <SyntaxItem name="outputviewertype_syntax" syntax="PPT">
+            <SyntaxCondition condition="equals" operand="exportfiletype_6" property="outputviewertype"/>
+          </SyntaxItem>
+          <SyntaxItem name="outputviewertype_syntax" syntax="TXT">
+            <SyntaxCondition condition="equals" operand="exportfiletype_7" property="outputviewertype"/>
+          </SyntaxItem>
+          <SyntaxItem name="outputviewertype_syntax" syntax="DOC">
+            <SyntaxCondition condition="equals" operand="exportfiletype_8" property="outputviewertype"/>
+          </SyntaxItem>
+          <SyntaxProperty name="outputviewertype" syntax="%%ThisValue%%"/>
+          <SyntaxItem name="outputdatatype_syntax" syntax="SAV">
+            <SyntaxCondition condition="equals" operand="item_190_1" property="outputdatatype"/>
+          </SyntaxItem>
+          <SyntaxItem name="outputdatatype_syntax" syntax="XLS">
+            <SyntaxCondition condition="equals" operand="outputdatatype_2" property="outputdatatype"/>
+          </SyntaxItem>
+          <SyntaxItem name="outputdatatype_syntax" syntax="CSV">
+            <SyntaxCondition condition="equals" operand="outputdatatype_3" property="outputdatatype"/>
+          </SyntaxItem>
+          <SyntaxItem name="outputdatatype_syntax" syntax="ZSAV">
+            <SyntaxCondition condition="equals" operand="outputdatatype_1" property="outputdatatype"/>
+          </SyntaxItem>
+          <SyntaxProperty name="outputdatatype" syntax="%%ThisValue%%"/>
+        </SyntaxGeneration>
+      </AppDetails>
+    </AppFeature>
+  </Application>
+</AppExtension>
