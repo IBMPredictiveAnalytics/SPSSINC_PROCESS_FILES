@@ -11,10 +11,9 @@ Description: This procedure applies a file of syntax to each of a grou
  p of selected files. It defines file handles and macros for use in th
  e syntax file, and provides various options for handling Viewer and d
  ata output.  This version of PROCESS FILES is not compatible with the
-  older (2.0 and earlier) versions, so code changes would be required
- for users of that version to upgrade.  The older version (2.0) can, h
- owever be installed as SPSSINC_PROCESS_FILESORIG from the Extension H
- ub
+  older (2.0 and earlier) versions, so code changes would be requiredf
+ or users of that version to upgrade.  The older version (2.0) can, ho
+ wever be installed as SPSSINC_PROCESS_FILESORIG from the Extension Hub
 Author: JKP, IBM SPSS
 Version: 2.1.0
 Product-Version: 24
